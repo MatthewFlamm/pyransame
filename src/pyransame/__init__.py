@@ -1,5 +1,6 @@
 """Python package for random sampling of meshes."""
 from collections.abc import Sequence
+from typing import Optional, Union
 
 import numpy as np
 import pyvista as pv
@@ -7,7 +8,31 @@ import pyvista as pv
 from .util import _generate_points_in_tri
 
 
-def random_surface_points(mesh, n, weights=None):
+def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[str, np.ndarray, Sequence]]=None) -> np.ndarray:
+    """Generate random points on surface.
+    
+    Parameters
+    ----------
+    mesh : pyvista.PolyData
+        The mesh for which to generate random points.  Must have cells.
+
+    n : int, default: 1
+        Number of random points to generate
+
+    weights : str, or sequence-like, optional
+        Weights to use for probability of choosing points inside each cell.
+
+        If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
+        If a ``sequence`` is supplied, it will add to the cell data using 
+        ``weights`` key.
+
+    Returns
+    -------
+    points : np.ndarray
+        ``(n, 3)`` points that exist inside cells on ``mesh``.
+
+    Examples
+    """
     if not isinstance(mesh, pv.PolyData):
         raise ValueError(f"mesh must by PolyData got {type(mesh)}")
 
@@ -18,7 +43,7 @@ def random_surface_points(mesh, n, weights=None):
         raise ValueError("Invalid weights, got weights")
     
     if not isinstance(weights, str):
-        mesh["weights"] = weights
+        mesh.cell_data["weights"] = weights
         weights = "weights"
 
     if not mesh.is_all_triangles:

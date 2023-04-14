@@ -14,7 +14,7 @@ def test_square_plane():
 
 def test_nonuniform_cell_size():
     mesh = pv.Plane(i_resolution=1, j_resolution=3)
-    
+
     # make mesh nonuniform, but still centered at (0,0,0)
     mesh.points = np.array([
         [1, -1, 0.0],
@@ -29,6 +29,26 @@ def test_nonuniform_cell_size():
 
     points = pyransame.random_surface_points(mesh, 100000)
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
+
+def test_nonuniform_cell_size_w_precomputed_areas():
+    mesh = pv.Plane(i_resolution=1, j_resolution=3)
+    
+    # make mesh nonuniform, but still centered at (0,0,0)
+    mesh.points = np.array([
+        [1, -1, 0.0],
+        [-1, -1, 0],
+        [1, 0, 0],
+        [-1, 0, 0],
+        [1, 0.5, 0],
+        [-1, 0.5, 0],
+        [1, 1, 0],
+        [-1, 1, 0],
+    ])
+    mesh = mesh.compute_cell_sizes(length=False, volume=False)
+
+    points = pyransame.random_surface_points(mesh, 100000)
+    assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
+
 
 def test_weights():
     mesh = pv.Plane(i_resolution=1, j_resolution=2)
