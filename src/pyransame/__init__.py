@@ -10,8 +10,6 @@ from .util import _generate_points_in_tri
 def random_surface_points(mesh, n, weights=None):
     if not isinstance(mesh, pv.PolyData):
         raise ValueError(f"mesh must by PolyData got {type(mesh)}")
-    # TODO: Handle more cell types than TRIANGLE
-    # TODO: Might be a breaking change if we need to tringulate only some cells in the future?
 
     if weights is None:
         weights = np.ones(mesh.n_cells)
