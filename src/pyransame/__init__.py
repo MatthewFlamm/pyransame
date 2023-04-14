@@ -31,7 +31,6 @@ def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[s
     points : np.ndarray
         ``(n, 3)`` points that exist inside cells on ``mesh``.
 
-    Examples
     """
     if not isinstance(mesh, pv.PolyData):
         raise ValueError(f"mesh must by PolyData got {type(mesh)}")
