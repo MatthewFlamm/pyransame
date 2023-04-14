@@ -35,7 +35,7 @@ jobs:
       - name: Install package
         run: python -m pip install .
       - name: Build documentation
-        run: make -C html
+        run: make -C doc html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
