@@ -10,6 +10,17 @@ dependencies = [
     "pyvista",
     "numpy",
 ]
+description = "My package description"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.8"
+keywords = ["one", "two"]
+license = {text = "MIT License"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+authors = [
+  {name = "Matthew Flamm", email = "matthewhflamm0@gmail.com"}
+]
 
 [tool.setuptools_scm]
 write_to = "src/pyransame/_version.py"
