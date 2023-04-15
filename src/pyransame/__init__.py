@@ -8,6 +8,9 @@ import pyvista as pv
 from .util import _generate_points_in_tri
 
 
+rng = np.random.default_rng()
+
+
 def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[str, np.ndarray, Sequence]]=None) -> np.ndarray:
     """Generate random points on surface.
     
@@ -60,8 +63,7 @@ def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[s
 
     p = p / p.sum()
 
-    # TODO: Use modern numpy rng
-    chosen = np.random.choice(n_cells, n, p=p)
+    chosen = rng.choice(n_cells, n, p=p)
 
     points = np.empty((n, 3))
     for i in range(n):
