@@ -1,9 +1,10 @@
 """Test utilities."""
-from hypothesis import assume, given, strategies as st
-from hypothesis.extra.numpy import arrays
 import numpy as np
-import pyvista as pv
 import pytest
+import pyvista as pv
+from hypothesis import assume, given
+from hypothesis import strategies as st
+from hypothesis.extra.numpy import arrays
 
 from pyransame.util import _generate_points_in_tri
 
