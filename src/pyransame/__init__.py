@@ -11,9 +11,13 @@ from .util import _generate_points_in_tri
 rng = np.random.default_rng()
 
 
-def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[str, np.ndarray, Sequence]]=None) -> np.ndarray:
+def random_surface_points(
+    mesh: pv.PolyData,
+    n: int = 1,
+    weights: Optional[Union[str, np.ndarray, Sequence]] = None,
+) -> np.ndarray:
     """Generate random points on surface.
-    
+
     Parameters
     ----------
     mesh : pyvista.PolyData
@@ -26,7 +30,7 @@ def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[s
         Weights to use for probability of choosing points inside each cell.
 
         If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
-        If a ``sequence`` is supplied, it will add to the cell data using 
+        If a ``sequence`` is supplied, it will add to the cell data using
         ``weights`` key.
 
     Returns
@@ -43,7 +47,7 @@ def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[s
 
     if not isinstance(weights, (np.ndarray, Sequence, str)):
         raise ValueError("Invalid weights, got weights")
-    
+
     if not isinstance(weights, str):
         mesh.cell_data["weights"] = weights
         weights = "weights"
@@ -67,7 +71,7 @@ def random_surface_points(mesh: pv.PolyData, n: int=1, weights: Optional[Union[s
 
     points = np.empty((n, 3))
     for i in range(n):
-        # TODO: assess whether gathering unique points first improves speed 
+        # TODO: assess whether gathering unique points first improves speed
         # TODO: when there are many points per cell
         points[i, :] = _generate_points_in_tri(*mesh.get_cell(chosen[i]).points)
 

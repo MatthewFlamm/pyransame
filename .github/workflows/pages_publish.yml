@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: doc/_build/html
-  
+
   # Deployment job
   deploy:
     environment:
