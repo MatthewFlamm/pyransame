@@ -27,3 +27,6 @@ write_to = "src/pyransame/_version.py"
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.isort]
+profile = "black"

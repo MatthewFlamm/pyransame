@@ -7,7 +7,6 @@ import pyvista as pv
 
 from .util import _generate_points_in_tri
 
-
 rng = np.random.default_rng()
 
 
