@@ -11,8 +11,6 @@ def _generate_points_in_tri(
     v1 = b - a
     v2 = c - a
 
-    points = np.empty((n, 3), dtype=float)
-
     r = rng.random(size=(n, 2))
     r = np.apply_along_axis(lambda ir: ir if ir.sum() <= 1.0 else 1.0 - ir, -1, r)
 
