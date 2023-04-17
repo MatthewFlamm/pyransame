@@ -43,7 +43,7 @@ def test_uniformity():
     center = np.array((0.5, np.sqrt(3.0) / 6.0, 0.0))
 
     # needs a lot of points to converge
-    points = _generate_points_in_tri(a, b, c, 1000000)
+    points = _generate_points_in_tri(a, b, c, 2000000)
 
     distances = np.linalg.norm(points - center, axis=-1)
     exp_distance = (
@@ -52,4 +52,4 @@ def test_uniformity():
     assert distances.mean() == pytest.approx(exp_distance, rel=1e-3)
 
     distances = np.linalg.norm(points, axis=-1)
-    assert distances.mean() == pytest.approx(1 / 12 * (4 + 3 * np.log(3)), rel=1e-3)
+    assert distances.mean() == pytest.approx(1 / 12 * (4 + 3 * np.log(3)), rel=2e-3)

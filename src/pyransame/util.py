@@ -13,9 +13,8 @@ def _generate_points_in_tri(
 
     points = np.empty((n, 3), dtype=float)
 
-    for i in range(n):
-        r1, r2 = 100.0, 100.0
-        while r1 + r2 > 1.0:
-            r1, r2 = rng.random(), rng.random()
-        points[i, :] = a + r1 * v1 + r2 * v2
+    r = rng.random(size=(n, 2))
+    r = np.apply_along_axis(lambda ir: ir if ir.sum() <= 1.0 else 1.0 - ir, -1, r)
+
+    points = a + np.atleast_2d(r[:, 0]).T * v1 + np.atleast_2d(r[:, 1]).T * v2
     return points
