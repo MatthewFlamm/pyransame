@@ -15,6 +15,7 @@ author = "Matthew Flamm"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "numpydoc",
     "sphinx.ext.autosummary",
     "pyvista.ext.plot_directive",
 ]

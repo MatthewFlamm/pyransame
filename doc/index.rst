@@ -5,7 +5,7 @@ Examples
 --------
 
 Random points on surface
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. pyvista-plot::
    :include-source: True
