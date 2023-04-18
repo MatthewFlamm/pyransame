@@ -6,7 +6,7 @@ from hypothesis import assume, given
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
 
-from pyransame.util import _generate_points_in_tri
+from pyransame.util import _generate_points_in_tri, _generate_points_in_tetra
 
 
 # Use min_value and max_value to avoid numerical imprecision artifacts, but still span a large space
@@ -34,7 +34,7 @@ def test_generate_points_in_tri(a, b, c):
 
 # equations from https://mathworld.wolfram.com/TrianglePointPicking.html
 # Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource.
-def test_uniformity():
+def test_uniformity_tri():
     # form equilaterial triangle with one vertex at origin
     a = np.array((0.0, 0.0, 0.0))
     b = np.array((1.0, 0.0, 0.0))
@@ -53,3 +53,20 @@ def test_uniformity():
 
     distances = np.linalg.norm(points, axis=-1)
     assert distances.mean() == pytest.approx(1 / 12 * (4 + 3 * np.log(3)), rel=2e-3)
+
+
+# equations from https://mathworld.wolfram.com/RegularTetrahedron.html
+# Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource.
+def test_uniformity_tetra():
+    # form regular tetrahedron with geometric center at origin
+    a = np.array((np.sqrt(3)/3.0, 0.0, -np.sqrt(6)/12.0))
+    b = np.array((-np.sqrt(3)/6, 0.5, -np.sqrt(6)/12.0))
+    c = np.array((-np.sqrt(3)/6, -0.5, -np.sqrt(6)/12.0))
+    d = np.array((0.0, 0.0, np.sqrt(6)/4))
+
+    center = np.array((0.0, 0.0, 0.0))
+
+    # needs a lot of points to converge
+    points = _generate_points_in_tetra(a, b, c, d, 2000000)
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3)
