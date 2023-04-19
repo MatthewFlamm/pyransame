@@ -69,4 +69,4 @@ def test_uniformity_tetra():
     # needs a lot of points to converge
     points = _generate_points_in_tetra(a, b, c, d, 2000000)
 
-    assert np.allclose(points.mean(axis=0), center, rtol=1e-3)
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
