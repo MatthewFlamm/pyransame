@@ -76,19 +76,32 @@ Using ``pyransame`` makes the solution easier and handles more complex scenarios
    >>> import pyransame
 
    As an example, say we have a cube with particles in it.  But we only have a description
-   of the volume fraction of the particles.  Let's say that they tend to float in the domain.
+   of the volume fraction of the particles.  Let's say that they tend to float in the domain,
+   so they tend to positioned towards the top (z-position).  Also, let's say that some particle age
+   is related to the y-position.
 
    >>> mesh = pv.UniformGrid(dimensions=(10, 10, 10))
    >>> mesh["volume_frac"] = np.exp(np.linspace(0, 5, mesh.n_cells))
    >>> mesh["volume_frac"] /= np.sum(mesh["volume_frac"])
-   >>> points = pyransame.random_volume_points(mesh, 200, weights="volume_frac")
+   >>> mesh["age"] = mesh.points[:, 1]
+   >>> points = pyransame.random_volume_points(mesh, 1000, weights="volume_frac")
+
+   Sample the ``age`` data onto points.  First create a ``PointSet`` so that we can use ``pyvista.sample``
+
+   >>> ps = pv.PointSet(points)
+   >>> ps = ps.sample(mesh)
 
    Now plot the result
 
+   >>> cpos = [
+   ...     [32., 16., 10.],
+   ...     [5.0, 3.9, 3.6],
+   ...     [-0.21, -0.076, 0.97]
+   ... ]
    >>> pl = pv.Plotter()
    >>> pl.add_mesh(mesh, style='wireframe')
-   >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0)
-   >>> pl.show()
+   >>> pl.add_points(ps, render_points_as_spheres=True, point_size=10.0)
+   >>> pl.show(cpos=cpos)
 
 API documentation
 -----------------
