@@ -61,6 +61,35 @@ Sample random points on a bunny, but weight more points towards top.
    >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
    >>> pl.show(cpos=cpos)
 
+Random sampling in a volume
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example inspired by the discussion in
+https://github.com/pyvista/pyvista/discussions/2703#discussioncomment-2828140.
+Using ``pyransame`` makes the solution easier and handles more complex scenarios.
+
+.. pyvista-plot::
+   :include-source: True
+
+   >>> import numpy as np
+   >>> import pyvista as pv
+   >>> import pyransame
+
+   As an example, say we have a cube with particles in it.  But we only have a description
+   of the volume fraction of the particles.  Let's say that they tend to float in the domain.
+
+   >>> mesh = pv.UniformGrid(dimensions=(10, 10, 10))
+   >>> mesh["volume_frac"] = np.exp(np.linspace(0, 5, mesh.n_cells))
+   >>> mesh["volume_frac"] /= np.sum(mesh["volume_frac"])
+   >>> points = pyransame.random_volume_points(mesh, 200, weights="volume_frac")
+
+   Now plot the result
+
+   >>> pl = pv.Plotter()
+   >>> pl.add_mesh(mesh, style='wireframe')
+   >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0)
+   >>> pl.show()
+
 API documentation
 -----------------
 .. currentmodule:: pyransame
@@ -69,6 +98,7 @@ API documentation
    :toctree: _stubs
 
    random_surface_points
+   random_volume_points
 
 Indices and tables
 ==================

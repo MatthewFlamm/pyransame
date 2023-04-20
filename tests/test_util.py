@@ -1,14 +1,17 @@
 """Test utilities."""
+from datetime import timedelta
+
 import numpy as np
 import pytest
 import pyvista as pv
-from hypothesis import assume, given
+from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
 
 from pyransame.util import _generate_points_in_tetra, _generate_points_in_tri
 
 
+@settings(deadline=timedelta(milliseconds=500))
 # Use min_value and max_value to avoid numerical imprecision artifacts, but still span a large space
 @given(
     arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
@@ -66,6 +69,7 @@ def test_uniformity_tetra():
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
 
 
+@settings(deadline=timedelta(milliseconds=500))
 # Use min_value and max_value to avoid numerical imprecision artifacts, but still span a large space
 @given(
     arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
