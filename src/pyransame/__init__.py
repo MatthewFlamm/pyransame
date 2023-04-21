@@ -138,19 +138,13 @@ def random_volume_points(
     --------
     >>> import pyransame
     >>> import pyvista as pv
-    >>> from pyvista import examples
-    >>> mesh = dddd
+    >>> mesh = pv.UniformGrid(dimensions=(11, 11, 11))
     >>> points = pyransame.random_volume_points(mesh, n=500)
 
     Now plot result.
 
-    >>> cpos = [
-    ...     (-0.07, 0.2, 0.5),
-    ...     (-0.02, 0.1, -0.0),
-    ...     (0.04, 1.0, -0.2),
-    ... ]
     >>> pl = pv.Plotter()
-    >>> pl.add_mesh(mesh, color='tan')
+    >>> pl.add_mesh(mesh, style='wireframe')
     >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
     >>> pl.show(cpos=cpos)
     """
