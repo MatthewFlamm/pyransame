@@ -8,7 +8,7 @@ import pyransame
 def test_square_plane():
     mesh = pv.Plane()
     points = pyransame.random_surface_points(mesh, 200000)
-    assert points.shape == (100000, 3)
+    assert points.shape == (200000, 3)
     assert isinstance(points, np.ndarray)
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
