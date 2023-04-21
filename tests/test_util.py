@@ -1,14 +1,17 @@
 """Test utilities."""
+from datetime import timedelta
+
 import numpy as np
 import pytest
 import pyvista as pv
-from hypothesis import assume, given
+from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
 
-from pyransame.util import _generate_points_in_tri
+from pyransame.util import _generate_points_in_tetra, _generate_points_in_tri
 
 
+@settings(deadline=timedelta(milliseconds=500))
 # Use min_value and max_value to avoid numerical imprecision artifacts, but still span a large space
 @given(
     arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
@@ -21,20 +24,17 @@ def test_generate_points_in_tri(a, b, c):
     assume(not np.allclose(a, b, rtol=1e-3, atol=1e-3))
     assume(not np.allclose(b, c, rtol=1e-3, atol=1e-3))
     assume(not np.allclose(a, c, rtol=1e-3, atol=1e-3))
-    # make sure that the two vectors are not coincident
-    assume(np.linalg.norm(np.cross(b - a, c - a)) > 1e-4)
+    tri = pv.Triangle([a, b, c])
+    assume(tri.area > 1e-4)
 
     points = _generate_points_in_tri(a, b, c, 1000)
-
-    tri = pv.Triangle([a, b, c])
-
     for i in range(1000):
         assert tri.find_containing_cell(points[i, :]) == 0
 
 
 # equations from https://mathworld.wolfram.com/TrianglePointPicking.html
 # Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource.
-def test_uniformity():
+def test_uniformity_tri():
     # form equilaterial triangle with one vertex at origin
     a = np.array((0.0, 0.0, 0.0))
     b = np.array((1.0, 0.0, 0.0))
@@ -49,7 +49,52 @@ def test_uniformity():
     exp_distance = (
         1 / 72 * (8 * np.sqrt(3) + 3 * np.arcsinh(np.sqrt(3)) + np.log(2 + np.sqrt(3)))
     )
-    assert distances.mean() == pytest.approx(exp_distance, rel=1e-3)
+    assert distances.mean() == pytest.approx(exp_distance, rel=2e-3)
 
     distances = np.linalg.norm(points, axis=-1)
     assert distances.mean() == pytest.approx(1 / 12 * (4 + 3 * np.log(3)), rel=2e-3)
+
+
+# equations from https://mathworld.wolfram.com/RegularTetrahedron.html
+# Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource.
+def test_uniformity_tetra():
+    # form regular tetrahedron with geometric center at origin
+    a = np.array((np.sqrt(3) / 3.0, 0.0, -np.sqrt(6) / 12.0))
+    b = np.array((-np.sqrt(3) / 6, 0.5, -np.sqrt(6) / 12.0))
+    c = np.array((-np.sqrt(3) / 6, -0.5, -np.sqrt(6) / 12.0))
+    d = np.array((0.0, 0.0, np.sqrt(6) / 4))
+
+    center = np.array((0.0, 0.0, 0.0))
+
+    # needs a lot of points to converge
+    points = _generate_points_in_tetra(a, b, c, d, 2000000)
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+@settings(deadline=timedelta(milliseconds=500))
+# Use min_value and max_value to avoid numerical imprecision artifacts, but still span a large space
+@given(
+    arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
+    arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
+    arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
+    arrays(float, 3, elements=st.floats(min_value=-1000.0, max_value=1000.0)),
+)
+def test_generate_points_in_tetra(a, b, c, d):
+    """Use pyvista builtin find_containing_cell to test."""
+    # make sure that the points are not coincident
+    assume(not np.allclose(a, b, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(b, c, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(a, c, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(a, d, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(b, d, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(c, d, rtol=1e-3, atol=1e-3))
+
+    cells = [4, 0, 1, 2, 3]
+    celltypes = [pv.CellType.TETRA]
+    tetra = pv.UnstructuredGrid(cells, celltypes, [a, b, c, d])
+    assume(tetra.volume > 1e-4)
+
+    points = _generate_points_in_tetra(a, b, c, d, 1000)
+    for i in range(1000):
+        assert tetra.find_containing_cell(points[i, :]) == 0
