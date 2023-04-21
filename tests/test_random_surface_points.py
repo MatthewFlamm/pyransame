@@ -80,6 +80,11 @@ def test_weights():
     points = pyransame.random_surface_points(mesh, 200000, "weights")
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
+    mesh.cell_data.clear()
+    mesh.cell_data["other_str"] = [1, 4]
+
+    points = pyransame.random_surface_points(mesh, 200, "other_str")
+
 
 def test_weights_array():
     mesh = pv.Plane(i_resolution=1, j_resolution=2)

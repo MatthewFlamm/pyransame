@@ -30,6 +30,10 @@ def test_weights_voxel():
     points = pyransame.random_volume_points(mesh, 200000, weights=weights)
     assert np.allclose(points.mean(axis=0), (0.25, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
+    mesh.cell_data.clear()
+    mesh.cell_data["other_str"] = [2.0, 1.0]
+    points = pyransame.random_volume_points(mesh, 2000, "other_str")
+
 
 def test_square_plane_tetra():
     mesh = pv.UniformGrid(dimensions=(11, 11, 11)).to_tetrahedra()
