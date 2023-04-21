@@ -89,7 +89,7 @@ def test_generate_points_in_tetra(a, b, c, d):
     assume(not np.allclose(a, d, rtol=1e-3, atol=1e-3))
     assume(not np.allclose(b, d, rtol=1e-3, atol=1e-3))
     assume(not np.allclose(c, d, rtol=1e-3, atol=1e-3))
-    
+
     cells = [4, 0, 1, 2, 3]
     celltypes = [pv.CellType.TETRA]
     tetra = pv.UnstructuredGrid(cells, celltypes, [a, b, c, d])
