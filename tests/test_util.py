@@ -21,6 +21,9 @@ from pyransame.util import _generate_points_in_tetra, _generate_points_in_tri
 def test_generate_points_in_tri(a, b, c):
     """Use pyvista builtin find_containing_cell to test."""
     # make sure that the points are not coincident
+    assume(not np.allclose(a, b, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(b, c, rtol=1e-3, atol=1e-3))
+    assume(not np.allclose(a, c, rtol=1e-3, atol=1e-3))
     tri = pv.Triangle([a, b, c])
     assume(tri.area > 1e-4)
 
