@@ -29,6 +29,8 @@ def random_surface_points(
     - Pixel
     - Quad
 
+    All cells must be convex.
+
     Parameters
     ----------
     mesh : pyvista.PolyData
