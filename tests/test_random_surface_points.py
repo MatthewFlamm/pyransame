@@ -17,6 +17,7 @@ def test_nonuniform_cell_size():
     mesh = pv.Plane(i_resolution=1, j_resolution=3)
 
     # make mesh nonuniform, but still centered at (0,0,0)
+    # points not numbered the same as inside each cell
     mesh.points = np.array(
         [
             [1, -1, 0.0],
@@ -38,6 +39,7 @@ def test_nonuniform_cell_size_w_precomputed_areas():
     mesh = pv.Plane(i_resolution=1, j_resolution=3)
 
     # make mesh nonuniform, but still centered at (0,0,0)
+    # points not numbered the same as inside each cell
     mesh.points = np.array(
         [
             [1, -1, 0.0],
@@ -60,6 +62,7 @@ def test_weights():
     mesh = pv.Plane(i_resolution=1, j_resolution=2)
 
     # make mesh nonuniform, with 2nd cell half size
+    # points not numbered the same as inside each cell
     mesh.points = np.array(
         [
             [1, -1, 0.0],
@@ -90,6 +93,7 @@ def test_weights_array():
     mesh = pv.Plane(i_resolution=1, j_resolution=2)
 
     # make mesh nonuniform, with 2nd cell half size
+    # points not numbered the same as inside each cell
     mesh.points = np.array(
         [
             [1, -1, 0.0],

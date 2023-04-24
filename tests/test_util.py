@@ -8,7 +8,13 @@ from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
 
-from pyransame.util import _generate_points_in_tetra, _generate_points_in_tri
+from pyransame.util import (
+    _generate_points_in_pixel,
+    _generate_points_in_quad,
+    _generate_points_in_tetra,
+    _generate_points_in_tri,
+    _generate_points_in_voxel,
+)
 
 
 @settings(deadline=timedelta(milliseconds=500))
@@ -98,3 +104,54 @@ def test_generate_points_in_tetra(a, b, c, d):
     points = _generate_points_in_tetra(a, b, c, d, 1000)
     for i in range(1000):
         assert tetra.find_containing_cell(points[i, :]) == 0
+
+
+def test_uniformity_quad():
+    # Quad can be non-square
+    a = np.array([0.0, 0.0, 0.0])
+    b = np.array([1.0, 0.0, 0.0])
+    c = np.array([1.0, 1.0, 0.0])
+    d = np.array([0.25, 0.75, 0.0])
+
+    area_abc = 1 * 1 / 2.0
+    l_side_acd = np.sqrt(0.75**2 + 0.25**2)
+    l_base_acd = np.sqrt(2.0)
+    area_acd = (
+        1.0
+        / 2.0
+        * l_base_acd**2
+        * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
+    )
+
+    center_abc = b + 2 / 3 * np.array([-0.5, 0.5, 0.0])
+    center_acd = d + 2 / 3 * np.array([0.25, -0.25, 0.0])
+
+    center = (center_abc * area_abc + center_acd * area_acd) / (area_abc + area_acd)
+
+    # needs a lot of points to converge
+    points = _generate_points_in_quad(a, b, c, d, 2000000)
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_pixel():
+    a = np.array([0.0, 0.0, 0.0])
+    b = np.array([1.0, 0.0, 0.0])
+    c = np.array([1.0, 2.0, 0.0])
+    d = np.array([0.0, 2.0, 0.0])
+
+    # needs a lot of points to converge
+    points = _generate_points_in_pixel(a, b, d, c, 2000000)
+    center = np.array([0.5, 1.0, 0.0])
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_voxel():
+    mesh = pv.UniformGrid(dimensions=(2, 2, 2), spacing=(1.0, 1.0, 2.0))
+
+    # needs a lot of points to converge
+    points = _generate_points_in_voxel(*mesh.points, 2000000)
+    center = np.array([0.5, 0.5, 1.0])
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)

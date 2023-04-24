@@ -6,6 +6,8 @@ import numpy as np
 import pyvista as pv
 
 from .util import (
+    _generate_points_in_pixel,
+    _generate_points_in_quad,
     _generate_points_in_tetra,
     _generate_points_in_tri,
     _generate_points_in_voxel,
@@ -20,6 +22,12 @@ def random_surface_points(
     weights: Optional[Union[str, np.ndarray, Sequence]] = None,
 ) -> np.ndarray:
     """Generate random points on surface.
+
+    Supported cell types:
+
+    - Triangle
+    - Pixel
+    - Quad
 
     Parameters
     ----------
@@ -74,10 +82,6 @@ def random_surface_points(
         mesh.cell_data["weights"] = weights
         weights = "weights"
 
-    if not mesh.is_all_triangles:
-        # TODO: Only triangulate if the user requests it or the celltypes are not yet supported
-        mesh = mesh.triangulate()
-
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
 
@@ -96,9 +100,17 @@ def random_surface_points(
     for i in range(n):
         # TODO: assess whether gathering unique points first improves speed
         # TODO: when there are many points per cell
-
-        points[i, :] = _generate_points_in_tri(*mesh.get_cell(chosen[i]).points)
-
+        c = mesh.get_cell(chosen[i])
+        if c.type == pv.CellType.TRIANGLE:
+            points[i, :] = _generate_points_in_tri(*c.points)
+        elif c.type == pv.CellType.PIXEL:
+            points[i, :] = _generate_points_in_pixel(*c.points)
+        elif c.type == pv.CellType.QUAD:
+            points[i, :] = _generate_points_in_quad(*c.points)
+        else:
+            raise NotImplementedError(
+                f"Random generation for {c.type.name} not yet supported"
+            )
     return points
 
 
@@ -109,7 +121,7 @@ def random_volume_points(
 ) -> np.ndarray:
     """Generate random points in a volume.
 
-    Current supported cell types:
+    Supported cell types:
 
     - Tetrahedron
     - Voxel
@@ -187,7 +199,7 @@ def random_volume_points(
             points[i, :] = _generate_points_in_voxel(*c.points)
         else:
             raise NotImplementedError(
-                f"Random generation for {c.type} not yet supported"
+                f"Random generation for {c.type.name} not yet supported"
             )
 
     return points
