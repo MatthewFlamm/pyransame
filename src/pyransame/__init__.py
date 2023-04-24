@@ -128,6 +128,8 @@ def random_volume_points(
     - Tetrahedron
     - Voxel
 
+    All cells must be convex.
+
     Parameters
     ----------
     mesh : pyvista.DataSet
