@@ -97,18 +97,24 @@ def random_surface_points(
     p = p / p.sum()
 
     chosen = rng.choice(n_cells, n, p=p)
-
+    chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
+    point_indices = np.zeros(shape=mesh.n_cells + 1, dtype=int)
+    point_indices[1:] = np.cumsum(unique_counts)
     points = np.empty((n, 3))
-    for i in range(n):
-        # TODO: assess whether gathering unique points first improves speed
-        # TODO: when there are many points per cell
-        c = mesh.get_cell(chosen[i])
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        c = mesh.get_cell(chosen_cell)
         if c.type == pv.CellType.TRIANGLE:
-            points[i, :] = _generate_points_in_tri(*c.points)
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_tri(*c.points, count)
         elif c.type == pv.CellType.PIXEL:
-            points[i, :] = _generate_points_in_pixel(*c.points)
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_pixel(*c.points, count)
         elif c.type == pv.CellType.QUAD:
-            points[i, :] = _generate_points_in_quad(*c.points)
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_quad(*c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
@@ -191,16 +197,21 @@ def random_volume_points(
     p = p / p.sum()
 
     chosen = rng.choice(n_cells, n, p=p)
-
+    chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
+    point_indices = np.zeros(shape=mesh.n_cells + 1, dtype=int)
+    point_indices[1:] = np.cumsum(unique_counts)
     points = np.empty((n, 3))
-    for i in range(n):
-        # TODO: assess whether gathering unique points first improves speed
-        # TODO: when there are many points per cell
-        c = mesh.get_cell(chosen[i])
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        c = mesh.get_cell(chosen_cell)
+
         if c.type == pv.CellType.TETRA:
-            points[i, :] = _generate_points_in_tetra(*c.points)
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_tetra(*c.points, count)
         elif c.type == pv.CellType.VOXEL:
-            points[i, :] = _generate_points_in_voxel(*c.points)
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_voxel(*c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
