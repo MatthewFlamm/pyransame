@@ -81,7 +81,7 @@ def random_surface_points(
         raise ValueError("Invalid weights, got weights")
 
     if isinstance(weights, str):
-        weights = mesh.cell_data["weights"]
+        weights = mesh.cell_data[weights]
 
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
@@ -176,7 +176,7 @@ def random_volume_points(
         raise ValueError("Invalid weights, got weights")
 
     if isinstance(weights, str):
-        weights = mesh.cell_data["weights"]
+        weights = mesh.cell_data[weights]
 
     for c in mesh.cell:
         if c.dimension != 3:
