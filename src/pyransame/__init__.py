@@ -17,7 +17,7 @@ rng = np.random.default_rng()
 
 
 def random_surface_points(
-    mesh: pv.PolyData,
+    mesh: pv.DataSet,
     n: int = 1,
     weights: Optional[Union[str, np.ndarray, Sequence]] = None,
 ) -> np.ndarray:
@@ -80,9 +80,8 @@ def random_surface_points(
     if not isinstance(weights, (np.ndarray, Sequence, str)):
         raise ValueError("Invalid weights, got weights")
 
-    if not isinstance(weights, str):
-        mesh.cell_data["weights"] = weights
-        weights = "weights"
+    if isinstance(weights, str):
+        weights = mesh.cell_data["weights"]
 
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
@@ -92,7 +91,7 @@ def random_surface_points(
     if "Area" not in mesh.cell_data:
         mesh = mesh.compute_cell_sizes(length=False, volume=False)
 
-    p = mesh[weights] * mesh["Area"]
+    p = weights * mesh["Area"]
 
     p = p / p.sum()
 
@@ -176,9 +175,8 @@ def random_volume_points(
     if not isinstance(weights, (np.ndarray, Sequence, str)):
         raise ValueError("Invalid weights, got weights")
 
-    if not isinstance(weights, str):
-        mesh.cell_data["weights"] = weights
-        weights = "weights"
+    if isinstance(weights, str):
+        weights = mesh.cell_data["weights"]
 
     for c in mesh.cell:
         if c.dimension != 3:
@@ -192,7 +190,7 @@ def random_volume_points(
     if "Volume" not in mesh.cell_data:
         mesh = mesh.compute_cell_sizes(length=False, volume=True)
 
-    p = mesh[weights] * mesh["Volume"]
+    p = weights * mesh["Volume"]
 
     p = p / p.sum()
 
