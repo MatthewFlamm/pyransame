@@ -13,6 +13,13 @@ def test_square_plane():
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
 
+def test_small_sample():
+    mesh = pv.Plane()
+    points = pyransame.random_surface_points(mesh, 2)
+    assert points.shape == (2, 3)
+    assert isinstance(points, np.ndarray)
+
+
 def test_nonuniform_cell_size():
     mesh = pv.Plane(i_resolution=1, j_resolution=3)
 

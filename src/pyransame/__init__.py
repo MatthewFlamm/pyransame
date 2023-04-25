@@ -98,7 +98,7 @@ def random_surface_points(
 
     chosen = rng.choice(n_cells, n, p=p)
     chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
-    point_indices = np.zeros(shape=mesh.n_cells + 1, dtype=int)
+    point_indices = np.zeros(shape=chosen_cells.size + 1, dtype=int)
     point_indices[1:] = np.cumsum(unique_counts)
     points = np.empty((n, 3))
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
@@ -198,7 +198,7 @@ def random_volume_points(
 
     chosen = rng.choice(n_cells, n, p=p)
     chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
-    point_indices = np.zeros(shape=mesh.n_cells + 1, dtype=int)
+    point_indices = np.zeros(shape=chosen_cells.size + 1, dtype=int)
     point_indices[1:] = np.cumsum(unique_counts)
     points = np.empty((n, 3))
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):

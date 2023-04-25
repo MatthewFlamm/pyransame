@@ -12,6 +12,13 @@ def test_square_plane_voxel():
     assert np.allclose(points.mean(axis=0), (5.0, 5.0, 5.0), rtol=5e-3, atol=5e-3)
 
 
+def test_small_sample():
+    mesh = pv.UniformGrid(dimensions=(11, 11, 11))
+    points = pyransame.random_volume_points(mesh, 2)
+    assert points.shape == (2, 3)
+    assert isinstance(points, np.ndarray)
+
+
 def test_nonuniformgrid_voxel():
     x = np.array([-1.0, 0.0, 2.0])
     y = np.array([-1.0, 1.0])
