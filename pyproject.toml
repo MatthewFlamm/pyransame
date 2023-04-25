@@ -30,3 +30,6 @@ namespaces = false
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
