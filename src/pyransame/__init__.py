@@ -33,7 +33,7 @@ def random_surface_points(
 
     Parameters
     ----------
-    mesh : pyvista.PolyData
+    mesh : pyvista.DataSet
         The mesh for which to generate random points.  Must have cells.
 
     n : int, default: 1

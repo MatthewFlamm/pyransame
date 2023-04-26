@@ -1,38 +1,77 @@
 Welcome to pyransame's documentation!
 =====================================
 
+PYthon RAndom SAmpling for MEshes (pyransame) provides utilities
+for choosing rando samples of points within cells of
+`PyVista <https://docs.pyvista.org/>`_ meshes.
+
 Examples
 --------
 
 Random points on surface
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+A mesh has points that define the vertices of the cells.
+Using ``pyvista`` and ``numpy`` we can quickly sample these
+vertices.
+
+.. pyvista-plot::
+   :include-source: True
+
+   >>> import numpy as np
+   >>> import pyvista as pv
+   >>> from pyvista import examples
+   >>> mesh = examples.download_antarctica_velocity()
+   >>> vertices = np.random.default_rng().choice(mesh.points, 500)
+   >>> mesh = mesh.compute_cell_sizes()
+
+   Plot the sampled vertices and the mesh colored by the local cell size.
+
+   >>> pl = pv.Plotter()
+   >>> pl.add_mesh(mesh, scalars="Area")
+   >>> pl.add_points(vertices, render_points_as_spheres=True,
+   ...               point_size=10.0, color='red')
+   >>> pl.view_xy()
+   >>> pl.show()
+
+But it can be seen that these vertices are not sampled
+uniformly randomly with respect to the surface area.
+They are sampled with respect to the vertices of the mesh.
+Areas of the mesh with more vertices, i.e. smaller cell areas
+in blue, will have more sampled points.
+
+This type of sampling will be dependent on the mesh
+structure.  It also does not allow for sampling inside the
+cells of the mesh.
+
+``pyransame`` allows for sampling inside the cells of the mesh.
+The sampling is now uniform within the area of the land itself rather than
+depending on the mesh structure.
+
 .. pyvista-plot::
    :include-source: True
 
    >>> import pyransame
    >>> import pyvista as pv
    >>> from pyvista import examples
-   >>> mesh = examples.download_bunny()
-   >>> points = pyransame.random_surface_points(mesh, n=500)
+   >>> mesh = examples.download_antarctica_velocity()
+   >>> points = pyransame.random_surface_points(mesh, 500)
 
    Now plot result.
 
-   >>> cpos = [
-   ...     (-0.07, 0.2, 0.5),
-   ...     (-0.02, 0.1, -0.0),
-   ...     (0.04, 1.0, -0.2),
-   ... ]
    >>> pl = pv.Plotter()
    >>> pl.add_mesh(mesh, color='tan')
-   >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
-   >>> pl.show(cpos=cpos)
+   >>> pl.add_points(points, render_points_as_spheres=True,
+   ...               point_size=10.0, color='red')
+   >>> pl.view_xy()
+   >>> pl.show()
 
 Weighted random sampling on surface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sample random points on a bunny, but weight more points towards top.
-
+A weighted sampling can also be obtained.  For example,
+if sampling is wanted to be biased roughly towards McMurdo station
+at the bottom of the image.
 
 .. pyvista-plot::
    :include-source: True
@@ -40,26 +79,24 @@ Sample random points on a bunny, but weight more points towards top.
    >>> import pyransame
    >>> import pyvista as pv
    >>> from pyvista import examples
-   >>> mesh = examples.download_bunny()
+   >>> mesh = examples.download_antarctica_velocity()
+
 
    The random sampling occurs inside the cells of the mesh, so cell data
    is needed.  ``pyvista.cell_centers`` is used to get position of the
-   cells.
+   cells relative to the top of the mesh.
 
-   >>> weights = mesh.cell_centers().points[:, 1]**2
+   >>> weights = (mesh.bounds[3] - mesh.cell_centers().points[:, 1])**2
    >>> points = pyransame.random_surface_points(mesh, n=500, weights=weights)
 
    Plot result.
 
-   >>> cpos = [
-   ...     (-0.07, 0.2, 0.5),
-   ...     (-0.02, 0.1, -0.0),
-   ...     (0.04, 1.0, -0.2),
-   ... ]
    >>> pl = pv.Plotter()
    >>> pl.add_mesh(mesh, color='tan')
-   >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
-   >>> pl.show(cpos=cpos)
+   >>> pl.add_points(points, render_points_as_spheres=True,
+   ...               point_size=10.0, color='red')
+   >>> pl.view_xy()
+   >>> pl.show()
 
 Random sampling in a volume
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,7 +137,8 @@ Using ``pyransame`` makes the solution easier and handles more complex scenarios
    ... ]
    >>> pl = pv.Plotter()
    >>> pl.add_mesh(mesh, style='wireframe')
-   >>> pl.add_points(ps, render_points_as_spheres=True, point_size=10.0)
+   >>> pl.add_points(ps, render_points_as_spheres=True,
+   ...               point_size=10.0)
    >>> pl.show(cpos=cpos)
 
 API documentation

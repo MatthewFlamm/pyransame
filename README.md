@@ -2,6 +2,13 @@
 PYthon RAndom SAmpling for MEshes
 
 Utilites for choosing random samples of points within cells of [PyVista](https://github.com/pyvista/pyvista) meshes.
+This package does _not_ choose random points that define the mesh itself, rather random points on the 2D surface or
+in the 3D volume are sampled.
 
-Random samples of mesh points or cells is supported direclty in vtk, `vtkMaskPoints` for example.
-Random samples of points within cells is not well supported in vtk, which is what this package provides.
+## Random sampling on a 2D surface
+
+![Samples on a bunny](/doc/_static/surface_sampling.png)
+
+## Random sampling in a 3D volume
+
+![Samples inside a 3D volume](/doc/_static/volume_sampling.png)
