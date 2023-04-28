@@ -7,6 +7,7 @@ import pyvista as pv
 
 from .util import (
     _generate_points_in_pixel,
+    _generate_points_in_polygon,
     _generate_points_in_quad,
     _generate_points_in_tetra,
     _generate_points_in_tri,
@@ -27,6 +28,7 @@ def random_surface_points(
 
     - Triangle
     - Pixel
+    - Polygon
     - Quad
 
     All cells must be convex.
@@ -71,9 +73,6 @@ def random_surface_points(
     >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
     >>> pl.show(cpos=cpos)
     """
-    if not isinstance(mesh, pv.PolyData):
-        raise ValueError(f"mesh must by PolyData got {type(mesh)}")
-
     if weights is None:
         weights = np.ones(mesh.n_cells)
 
@@ -92,6 +91,9 @@ def random_surface_points(
         mesh = mesh.compute_cell_sizes(length=False, volume=False)
 
     p = weights * mesh["Area"]
+
+    if p.sum() == 0:
+        raise ValueError("No cells with area in DataSet")
 
     p = p / p.sum()
 
@@ -114,6 +116,10 @@ def random_surface_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = _generate_points_in_quad(*c.points, count)
+        elif c.type == pv.CellType.POLYGON:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_polygon(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
@@ -178,10 +184,6 @@ def random_volume_points(
     if isinstance(weights, str):
         weights = mesh.cell_data[weights]
 
-    for c in mesh.cell:
-        if c.dimension != 3:
-            raise ValueError("non 3D cell in DataSet")
-
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
 
@@ -191,6 +193,9 @@ def random_volume_points(
         mesh = mesh.compute_cell_sizes(length=False, volume=True)
 
     p = weights * mesh["Volume"]
+
+    if p.sum() == 0:
+        raise ValueError("No cells with volume in DataSet")
 
     p = p / p.sum()
 

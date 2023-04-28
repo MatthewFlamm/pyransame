@@ -45,6 +45,26 @@ def _generate_points_in_quad(
     return points
 
 
+def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
+    ntri = points.shape[0] - 2
+
+    areas = np.empty(shape=ntri, dtype=float)
+    for i in range(ntri):
+        areas[i] = _area_tri(points[0, :], points[i + 1, :], points[i + 2, :])
+
+    out = np.empty((n, 3))
+
+    p = areas / areas.sum()
+    r = rng.choice(ntri, size=n, p=p)
+
+    for i in range(n):
+        out[i, :] = _generate_points_in_tri(
+            points[0, :], points[r[i] + 1, :], points[r[i] + 2, :]
+        )
+
+    return out
+
+
 def _tetra_random_coordinates(r: np.ndarray):
     if r[0:2].sum() > 1.0:
         r[0:2] = 1.0 - r[0:2]
