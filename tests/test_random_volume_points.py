@@ -1,7 +1,38 @@
 import numpy as np
+import pytest
 import pyvista as pv
 
 import pyransame
+
+
+def test_cell_types():
+    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    assert mesh.get_cell(0).type == pv.CellType.VOXEL
+    pyransame.random_volume_points(mesh, 20)
+
+    mesh = pv.UniformGrid(dimensions=(4, 4, 4)).to_tetrahedra()
+    assert mesh.get_cell(0).type == pv.CellType.TETRA
+    pyransame.random_volume_points(mesh, 20)
+
+
+def test_mixed_types():
+    # as long as there are 3D cells, we should be able to sample even if there are other cell types
+    # adds a 2D Quad to a Voxel only mesh
+    uniform_mesh = pv.UniformGrid(dimensions=(4, 4, 4)).cast_to_unstructured_grid()
+    points = uniform_mesh.points.copy()
+    cells = uniform_mesh.cells.copy()
+    cell_types = uniform_mesh.celltypes.copy()
+    cells = np.append(cells, [4, 0, 1, 5, 4])
+    cell_types = np.append(cell_types, pv.CellType.QUAD)
+    mesh = pv.UnstructuredGrid(cells, cell_types, uniform_mesh.points)
+    pyransame.random_volume_points(mesh, 20)
+
+
+def test_unsupported_types():
+    mesh = pv.UniformGrid(dimensions=(4, 4, 1))
+    assert all([c.type == pv.CellType.PIXEL for c in mesh.cell])
+    with pytest.raises(ValueError, match="No cells with volume in DataSet"):
+        pyransame.random_volume_points(mesh, 20)
 
 
 def test_square_plane_voxel():
