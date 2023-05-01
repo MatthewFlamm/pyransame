@@ -122,10 +122,6 @@ def random_surface_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = _generate_points_in_polygon(c.points, count)
-        elif c.type == pv.CellType.POLYGON:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = _generate_points_in_polygon(c.points, count)
         elif c.type == pv.CellType.TRIANGLE_STRIP:
             points[
                 point_indices[i] : point_indices[i + 1], :
