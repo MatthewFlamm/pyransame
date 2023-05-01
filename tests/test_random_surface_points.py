@@ -175,3 +175,11 @@ def test_weights_array():
     # Therefore a weighting of 1:4 must be applied to have center be at y=0.0
     points = pyransame.random_surface_points(mesh, 200000, [1, 4])
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
+
+
+def test_wrong_weights():
+    mesh = pv.Plane()
+    weights = {"not a good entry": "should raise an error"}
+
+    with pytest.raises(ValueError, match="Invalid weights, got {'not"):
+        pyransame.random_surface_points(mesh, 20, weights=weights)

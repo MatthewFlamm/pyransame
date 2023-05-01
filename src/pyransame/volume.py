@@ -61,7 +61,7 @@ def random_volume_points(
         weights = np.ones(mesh.n_cells)
 
     if not isinstance(weights, (np.ndarray, Sequence, str)):
-        raise ValueError("Invalid weights, got weights")
+        raise ValueError(f"Invalid weights, got {weights}")
 
     if isinstance(weights, str):
         weights = mesh.cell_data[weights]

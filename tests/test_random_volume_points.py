@@ -100,3 +100,11 @@ def test_weights_tetra():
     tetra_mesh["weights"] = mesh["weights"][tetra_mesh.cell_data.active_scalars]
     points = pyransame.random_volume_points(tetra_mesh, 200000, weights="weights")
     assert np.allclose(points.mean(axis=0), (0.25, 0.0, 0.0), rtol=5e-3, atol=5e-3)
+
+
+def test_wrong_weights():
+    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    weights = {"not a good entry": "should raise an error"}
+
+    with pytest.raises(ValueError, match="Invalid weights, got {'not"):
+        pyransame.random_volume_points(mesh, 20, weights=weights)
