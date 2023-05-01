@@ -108,3 +108,10 @@ def test_wrong_weights():
 
     with pytest.raises(ValueError, match="Invalid weights, got {'not"):
         pyransame.random_volume_points(mesh, 20, weights=weights)
+
+
+def test_wrong_n():
+    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+
+    with pytest.raises(ValueError, match="n must be > 0, got -20"):
+        pyransame.random_volume_points(mesh, -20)
