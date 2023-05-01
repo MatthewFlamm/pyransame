@@ -2,7 +2,7 @@
 
 import numpy as np
 
-rng = np.random.default_rng()
+import pyransame
 
 
 def _generate_points_in_tri(
@@ -11,7 +11,7 @@ def _generate_points_in_tri(
     v1 = b - a
     v2 = c - a
 
-    r = rng.random(size=(n, 2))
+    r = pyransame.rng.random(size=(n, 2))
     r = np.apply_along_axis(lambda ir: ir if ir.sum() <= 1.0 else 1.0 - ir, -1, r)
 
     points = a + np.atleast_2d(r[:, 0]).T * v1 + np.atleast_2d(r[:, 1]).T * v2
@@ -35,7 +35,7 @@ def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
     out = np.empty((n, 3))
 
     p = areas / areas.sum()
-    r = rng.choice(ntri, size=n, p=p)
+    r = pyransame.rng.choice(ntri, size=n, p=p)
 
     for i in range(n):
         out[i, :] = _generate_points_in_tri(
@@ -55,7 +55,7 @@ def _generate_points_in_quad(
 
     p = np.array([area1, area2])
     p = p / p.sum()
-    r = rng.choice(np.array([0, 1], dtype=int), size=n, p=p)
+    r = pyransame.rng.choice(np.array([0, 1], dtype=int), size=n, p=p)
 
     for i in range(n):
         if r[i] == 0:
@@ -75,7 +75,7 @@ def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
     out = np.empty((n, 3))
 
     p = areas / areas.sum()
-    r = rng.choice(ntri, size=n, p=p)
+    r = pyransame.rng.choice(ntri, size=n, p=p)
 
     for i in range(n):
         out[i, :] = _generate_points_in_tri(
@@ -108,7 +108,7 @@ def _generate_points_in_tetra(
     v1 = c - a
     v2 = d - a
 
-    r = rng.random(size=(n, 3))
+    r = pyransame.rng.random(size=(n, 3))
     r = np.apply_along_axis(_tetra_random_coordinates, -1, r)
 
     points = (
@@ -135,7 +135,7 @@ def _generate_points_in_voxel(
     v1 = c - a
     v2 = e - a
 
-    r = rng.random(size=(n, 3))
+    r = pyransame.rng.random(size=(n, 3))
 
     points = (
         a
@@ -156,7 +156,7 @@ def _generate_points_in_pixel(
     v0 = b - a
     v1 = c - a
 
-    r = rng.random(size=(n, 2))
+    r = pyransame.rng.random(size=(n, 2))
 
     points = a + np.atleast_2d(r[:, 0]).T * v0 + np.atleast_2d(r[:, 1]).T * v1
     return points
