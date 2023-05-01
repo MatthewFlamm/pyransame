@@ -11,6 +11,7 @@ from .util import (
     _generate_points_in_quad,
     _generate_points_in_tetra,
     _generate_points_in_tri,
+    _generate_points_in_tri_strip,
     _generate_points_in_voxel,
 )
 
@@ -27,6 +28,7 @@ def random_surface_points(
     Supported cell types:
 
     - Triangle
+    - Triangle Strip
     - Pixel
     - Polygon
     - Quad
@@ -120,6 +122,10 @@ def random_surface_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = _generate_points_in_polygon(c.points, count)
+        elif c.type == pv.CellType.TRIANGLE_STRIP:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_tri_strip(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"

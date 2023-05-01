@@ -25,6 +25,26 @@ def _area_tri(pa, pb, pc):
     return 1.0 / 4.0 * np.sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c))
 
 
+def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
+    ntri = points.shape[0] - 2
+
+    areas = np.empty(shape=ntri, dtype=float)
+    for i in range(ntri):
+        areas[i] = _area_tri(points[i, :], points[i + 1, :], points[i + 2, :])
+
+    out = np.empty((n, 3))
+
+    p = areas / areas.sum()
+    r = rng.choice(ntri, size=n, p=p)
+
+    for i in range(n):
+        out[i, :] = _generate_points_in_tri(
+            points[r[i], :], points[r[i] + 1, :], points[r[i] + 2, :]
+        )
+
+    return out
+
+
 def _generate_points_in_quad(
     a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray, n: int = 1
 ) -> np.ndarray:
