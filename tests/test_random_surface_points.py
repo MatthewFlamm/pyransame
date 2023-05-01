@@ -25,6 +25,23 @@ def test_cell_types():
     assert mesh.get_cell(0).type == pv.CellType.PIXEL
     pyransame.random_surface_points(mesh, 20)
 
+    points = np.array(
+        [
+            [1.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [1.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 2.0, 0.0],
+            [0.0, 2.0, 0.0],
+            [1.0, 3.0, 0.0],
+            [0.0, 3.0, 0.0],
+        ]
+    )
+    strips = np.array([8, 0, 1, 2, 3, 4, 5, 6, 7])
+    mesh = pv.PolyData(points, strips=strips)
+    assert mesh.get_cell(0).type == pv.CellType.TRIANGLE_STRIP
+    pyransame.random_surface_points(mesh, 20)
+
 
 def test_mixed_types():
     # as long as there are 2D cells, we should be able to sample even if there are other cell types
