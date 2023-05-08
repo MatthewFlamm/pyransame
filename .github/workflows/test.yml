@@ -21,7 +21,7 @@ jobs:
             pyvista-version: "0.38.6"
             vtk-version: "latest"
           - python-version: "3.9"
-            pyvista-version: "0.34"
+            pyvista-version: "latest"
             vtk-version: "9.1"
 
     steps:
