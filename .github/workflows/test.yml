@@ -21,9 +21,8 @@ jobs:
             pyvista-version: "0.38.6"
             vtk-version: "latest"
           - python-version: "3.9"
-            pyvista-version: "0.30"
+            pyvista-version: "0.34"
             vtk-version: "9.1"
-            max-numpy-version: "1.24"
 
     steps:
     - uses: actions/checkout@v3
@@ -41,9 +40,6 @@ jobs:
     - name: Install vtk version
       if: ${{ matrix.vtk-version != 'latest' }}
       run: python -m pip install vtk==${{ matrix.vtk-version }}
-    - name: Install numpy
-      if: ${{ matrix.max-numpy-version != '' }}
-      run: python -m pip install numpy<${{ matrix.max-numpy-version}}
     - name: Install package
       run: python -m pip install -e .
     - name: List environment
