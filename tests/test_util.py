@@ -11,6 +11,7 @@ from hypothesis.extra.numpy import arrays
 from pyransame.util import (
     _generate_points_in_pixel,
     _generate_points_in_polygon,
+    _generate_points_in_pyramid,
     _generate_points_in_quad,
     _generate_points_in_tetra,
     _generate_points_in_tri,
@@ -265,5 +266,23 @@ def test_uniformity_voxel():
     # needs a lot of points to converge
     points = _generate_points_in_voxel(*mesh.points, 2000000)
     center = np.array([0.5, 0.5, 1.0])
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_pyramid():
+    mesh = pv.Pyramid(
+        [
+            [1.0, 1.0, 0.0],
+            [-1.0, 1.0, 0.0],
+            [-1.0, -1.0, 0.0],
+            [1.0, -1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+
+    center = np.array([0.0, 0.0, 0.25])
+
+    points = _generate_points_in_pyramid(mesh.points, 2000000)
 
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)

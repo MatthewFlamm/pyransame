@@ -14,6 +14,10 @@ def test_cell_types():
     assert mesh.get_cell(0).type == pv.CellType.TETRA
     pyransame.random_volume_points(mesh, 20)
 
+    mesh = pv.Pyramid()
+    assert mesh.get_cell(0).type == pv.CellType.PYRAMID
+    pyransame.random_volume_points(mesh, 20)
+
 
 def test_mixed_types():
     # as long as there are 3D cells, we should be able to sample even if there are other cell types
@@ -97,7 +101,9 @@ def test_weights_tetra():
     mesh = pv.RectilinearGrid(x, y, z)
     mesh["weights"] = [2.0, 1.0]
     tetra_mesh = mesh.to_tetrahedra(pass_cell_ids=True)
-    tetra_mesh["weights"] = mesh["weights"][tetra_mesh.cell_data.active_scalars]
+    if "weights" not in tetra_mesh.cell_data:
+        # For backwards compatability pyvista < 0.39.0
+        tetra_mesh["weights"] = mesh["weights"][tetra_mesh.cell_data.active_scalars]
     points = pyransame.random_volume_points(tetra_mesh, 200000, weights="weights")
     assert np.allclose(points.mean(axis=0), (0.25, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
