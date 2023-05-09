@@ -14,6 +14,10 @@ def test_cell_types():
     assert mesh.get_cell(0).type == pv.CellType.TETRA
     pyransame.random_volume_points(mesh, 20)
 
+    mesh = pv.Pyramid()
+    assert mesh.get_cell(0).type == pv.CellType.PYRAMID
+    pyransame.random_volume_points(mesh, 20)
+
 
 def test_mixed_types():
     # as long as there are 3D cells, we should be able to sample even if there are other cell types

@@ -18,7 +18,7 @@ def _generate_points_in_tri(
     return points
 
 
-def _area_tri(pa, pb, pc):
+def _area_tri(pa: np.ndarray, pb: np.ndarray, pc: np.ndarray) -> float:
     a = np.linalg.norm(pb - pa)
     b = np.linalg.norm(pc - pb)
     c = np.linalg.norm(pc - pa)
@@ -85,7 +85,7 @@ def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
     return out
 
 
-def _tetra_random_coordinates(r: np.ndarray):
+def _tetra_random_coordinates(r: np.ndarray) -> np.ndarray:
     if r[0:2].sum() > 1.0:
         r[0:2] = 1.0 - r[0:2]
 
@@ -118,6 +118,52 @@ def _generate_points_in_tetra(
         + np.atleast_2d(r[:, 2]).T * v2
     )
     return points
+
+
+def _area_tetra(points: np.ndarray) -> float:
+    a = np.linalg.norm(points[0, :] - points[1, :])
+    b = np.linalg.norm(points[0, :] - points[2, :])
+    c = np.linalg.norm(points[0, :] - points[3, :])
+    x = np.linalg.norm(points[2, :] - points[3, :])
+    y = np.linalg.norm(points[1, :] - points[3, :])
+    z = np.linalg.norm(points[1, :] - points[2, :])
+
+    X = b**2 + c**2 - x**2
+    Y = a**2 + c**2 - y**2
+    Z = a**2 + b**2 - z**2
+
+    return (
+        np.sqrt(
+            4 * a**2 * b**2 * c**2
+            - a**2 * X**2
+            - b**2 * Y**2
+            - c**2 * Z**2
+            + X * Y * Z
+        )
+        / 12.0
+    )
+
+
+def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
+    tetra0 = [0, 1, 2, 4]
+    tetra1 = [0, 2, 3, 4]
+
+    area0 = _area_tetra(points[tetra0, :])
+    area1 = _area_tetra(points[tetra1, :])
+
+    areas = np.array([area0, area1])
+
+    p = areas / areas.sum()
+    r = pyransame.rng.choice(2, size=n, p=p)
+
+    out = np.empty((n, 3))
+    for i in range(n):
+        if r[i] == 0:
+            out[i, :] = _generate_points_in_tetra(*points[tetra0, :])
+        else:
+            out[i, :] = _generate_points_in_tetra(*points[tetra1, :])
+
+    return out
 
 
 def _generate_points_in_voxel(
