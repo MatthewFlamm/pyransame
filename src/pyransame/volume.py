@@ -20,6 +20,7 @@ def random_volume_points(
 
     Supported cell types:
 
+    - Pyramid
     - Tetrahedron
     - Voxel
 
