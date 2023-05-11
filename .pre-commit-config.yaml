@@ -18,6 +18,9 @@ repos:
   rev: v1.3.0
   hooks:
   -   id: mypy
+      args: [--strict]
       additional_dependencies: [pyvista, numpy]
+
 ci:
   autofix_prs: false
+  skip: mypy  # too big for free tier with deps
