@@ -1,36 +1,38 @@
 """Utilities."""
 
 import numpy as np
+import numpy.typing as npt
 
 import pyransame
 
 
-def _generate_points_in_tri(
-    a: np.ndarray, b: np.ndarray, c: np.ndarray, n: int = 1
-) -> np.ndarray:
+def _generate_points_in_tri(points: npt.NDArray, n: int = 1) -> npt.NDArray[np.float_]:
+    a, b, c = points
     v1 = b - a
     v2 = c - a
 
     r = pyransame.rng.random(size=(n, 2))
     r = np.apply_along_axis(lambda ir: ir if ir.sum() <= 1.0 else 1.0 - ir, -1, r)
 
-    points = a + np.atleast_2d(r[:, 0]).T * v1 + np.atleast_2d(r[:, 1]).T * v2
-    return points
+    return a + np.atleast_2d(r[:, 0]).T * v1 + np.atleast_2d(r[:, 1]).T * v2
 
 
-def _area_tri(pa: np.ndarray, pb: np.ndarray, pc: np.ndarray) -> float:
+def _area_tri(points: npt.NDArray) -> float:
+    pa, pb, pc = points
     a = np.linalg.norm(pb - pa)
     b = np.linalg.norm(pc - pb)
     c = np.linalg.norm(pc - pa)
     return 1.0 / 4.0 * np.sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c))
 
 
-def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
+def _generate_points_in_tri_strip(
+    points: npt.NDArray, n: int = 1
+) -> npt.NDArray[np.float_]:
     ntri = points.shape[0] - 2
 
     areas = np.empty(shape=ntri, dtype=float)
     for i in range(ntri):
-        areas[i] = _area_tri(points[i, :], points[i + 1, :], points[i + 2, :])
+        areas[i] = _area_tri(points[i : i + 3, :])
 
     out = np.empty((n, 3))
 
@@ -38,20 +40,18 @@ def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
     r = pyransame.rng.choice(ntri, size=n, p=p)
 
     for i in range(n):
-        out[i, :] = _generate_points_in_tri(
-            points[r[i], :], points[r[i] + 1, :], points[r[i] + 2, :]
-        )
+        out[i, :] = _generate_points_in_tri(points[r[i] : r[i] + 3, :])
 
     return out
 
 
-def _generate_points_in_quad(
-    a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray, n: int = 1
-) -> np.ndarray:
-    area1 = _area_tri(a, b, c)
-    area2 = _area_tri(a, c, d)
+def _generate_points_in_quad(points: npt.NDArray, n: int = 1) -> npt.NDArray[np.float_]:
+    tri1 = [0, 1, 2]
+    tri2 = [0, 2, 3]
+    area1 = _area_tri(points[tri1, :])
+    area2 = _area_tri(points[tri2, :])
 
-    points = np.empty((n, 3))
+    out = np.empty((n, 3))
 
     p = np.array([area1, area2])
     p = p / p.sum()
@@ -59,18 +59,18 @@ def _generate_points_in_quad(
 
     for i in range(n):
         if r[i] == 0:
-            points[i, :] = _generate_points_in_tri(a, b, c)
+            out[i, :] = _generate_points_in_tri(points[tri1, :])
         else:
-            points[i, :] = _generate_points_in_tri(a, c, d)
-    return points
+            out[i, :] = _generate_points_in_tri(points[tri2, :])
+    return out
 
 
-def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
+def _generate_points_in_polygon(points: npt.NDArray, n: int = 1) -> npt.NDArray:
     ntri = points.shape[0] - 2
 
     areas = np.empty(shape=ntri, dtype=float)
     for i in range(ntri):
-        areas[i] = _area_tri(points[0, :], points[i + 1, :], points[i + 2, :])
+        areas[i] = _area_tri(points[[0, i + 1, i + 2], :])
 
     out = np.empty((n, 3))
 
@@ -78,14 +78,12 @@ def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
     r = pyransame.rng.choice(ntri, size=n, p=p)
 
     for i in range(n):
-        out[i, :] = _generate_points_in_tri(
-            points[0, :], points[r[i] + 1, :], points[r[i] + 2, :]
-        )
+        out[i, :] = _generate_points_in_tri(points[[0, r[i] + 1, r[i] + 2], :])
 
     return out
 
 
-def _tetra_random_coordinates(r: np.ndarray) -> np.ndarray:
+def _tetra_random_coordinates(r: npt.NDArray[np.float_]) -> npt.NDArray[np.float_]:
     if r[0:2].sum() > 1.0:
         r[0:2] = 1.0 - r[0:2]
 
@@ -102,8 +100,9 @@ def _tetra_random_coordinates(r: np.ndarray) -> np.ndarray:
 
 
 def _generate_points_in_tetra(
-    a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray, n: int = 1
-) -> np.ndarray:
+    points: npt.NDArray, n: int = 1
+) -> npt.NDArray[np.float_]:
+    a, b, c, d = points
     v0 = b - a
     v1 = c - a
     v2 = d - a
@@ -111,16 +110,15 @@ def _generate_points_in_tetra(
     r = pyransame.rng.random(size=(n, 3))
     r = np.apply_along_axis(_tetra_random_coordinates, -1, r)
 
-    points = (
+    return (
         a
         + np.atleast_2d(r[:, 0]).T * v0
         + np.atleast_2d(r[:, 1]).T * v1
         + np.atleast_2d(r[:, 2]).T * v2
     )
-    return points
 
 
-def _area_tetra(points: np.ndarray) -> float:
+def _area_tetra(points: npt.NDArray) -> float:
     a = np.linalg.norm(points[0, :] - points[1, :])
     b = np.linalg.norm(points[0, :] - points[2, :])
     c = np.linalg.norm(points[0, :] - points[3, :])
@@ -144,7 +142,9 @@ def _area_tetra(points: np.ndarray) -> float:
     )
 
 
-def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
+def _generate_points_in_pyramid(
+    points: npt.NDArray, n: int = 1
+) -> npt.NDArray[np.float_]:
     tetra0 = [0, 1, 2, 4]
     tetra1 = [0, 2, 3, 4]
 
@@ -159,50 +159,40 @@ def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
     out = np.empty((n, 3))
     for i in range(n):
         if r[i] == 0:
-            out[i, :] = _generate_points_in_tetra(*points[tetra0, :])
+            out[i, :] = _generate_points_in_tetra(points[tetra0, :])
         else:
-            out[i, :] = _generate_points_in_tetra(*points[tetra1, :])
+            out[i, :] = _generate_points_in_tetra(points[tetra1, :])
 
     return out
 
 
 def _generate_points_in_voxel(
-    a: np.ndarray,
-    b: np.ndarray,
-    c: np.ndarray,
-    d: np.ndarray,
-    e: np.ndarray,
-    f: np.ndarray,
-    g: np.ndarray,
-    h: np.ndarray,
+    points: npt.NDArray,
     n: int = 1,
-) -> np.ndarray:
+) -> npt.NDArray[np.float_]:
+    a, b, c, _, e, _, _, _ = points
     v0 = b - a
     v1 = c - a
     v2 = e - a
 
     r = pyransame.rng.random(size=(n, 3))
 
-    points = (
+    return (
         a
         + np.atleast_2d(r[:, 0]).T * v0
         + np.atleast_2d(r[:, 1]).T * v1
         + np.atleast_2d(r[:, 2]).T * v2
     )
-    return points
 
 
 def _generate_points_in_pixel(
-    a: np.ndarray,
-    b: np.ndarray,
-    c: np.ndarray,
-    d: np.ndarray,
+    points: npt.NDArray,
     n: int = 1,
-) -> np.ndarray:
+) -> npt.NDArray[np.float_]:
+    a, b, c, _ = points
     v0 = b - a
     v1 = c - a
 
     r = pyransame.rng.random(size=(n, 2))
 
-    points = a + np.atleast_2d(r[:, 0]).T * v0 + np.atleast_2d(r[:, 1]).T * v1
-    return points
+    return a + np.atleast_2d(r[:, 0]).T * v0 + np.atleast_2d(r[:, 1]).T * v1

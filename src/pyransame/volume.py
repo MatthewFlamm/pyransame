@@ -3,17 +3,19 @@ from collections.abc import Sequence
 from typing import Optional, Union
 
 import numpy as np
+import numpy.typing as npt
 import pyvista as pv
+from pyvista.core.celltype import CellType
 
 import pyransame
 import pyransame.util as util
 
 
 def random_volume_points(
-    mesh: pv.DataSet,
+    mesh: pv.core.dataset.DataSet,
     n: int = 1,
-    weights: Optional[Union[str, np.ndarray, Sequence]] = None,
-) -> np.ndarray:
+    weights: Optional[Union[str, npt.ArrayLike]] = None,
+) -> npt.NDArray[np.float_]:
     """Generate random points in a volume.
 
     Supported cell types:
@@ -31,12 +33,10 @@ def random_volume_points(
     n : int, default: 1
         Number of random points to generate
 
-    weights : str, or sequence-like, optional
+    weights : str, or array_like, optional
         Weights to use for probability of choosing points inside each cell.
 
         If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
-        If a ``sequence`` is supplied, it will add to the cell data using
-        ``weights`` key.
 
     Returns
     -------
@@ -60,11 +60,10 @@ def random_volume_points(
     if weights is None:
         weights = np.ones(mesh.n_cells)
 
-    if not isinstance(weights, (np.ndarray, Sequence, str)):
-        raise ValueError(f"Invalid weights, got {weights}")
-
     if isinstance(weights, str):
         weights = mesh.cell_data[weights]
+
+    weights = np.asanyarray(weights)
 
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
@@ -72,7 +71,7 @@ def random_volume_points(
     n_cells = mesh.n_cells
 
     if "Volume" not in mesh.cell_data:
-        mesh = mesh.compute_cell_sizes(length=False, volume=True)
+        mesh = mesh.compute_cell_sizes(length=False, area=False, volume=True)  # type: ignore
 
     p = weights * mesh["Volume"]
 
@@ -89,15 +88,15 @@ def random_volume_points(
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         c = mesh.get_cell(chosen_cell)
 
-        if c.type == pv.CellType.TETRA:
+        if c.type == CellType.TETRA:
             points[
                 point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_tetra(*c.points, count)
-        elif c.type == pv.CellType.VOXEL:
+            ] = util._generate_points_in_tetra(c.points, count)
+        elif c.type == CellType.VOXEL:
             points[
                 point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_voxel(*c.points, count)
-        elif c.type == pv.CellType.PYRAMID:
+            ] = util._generate_points_in_voxel(c.points, count)
+        elif c.type == CellType.PYRAMID:
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = util._generate_points_in_pyramid(c.points, count)
