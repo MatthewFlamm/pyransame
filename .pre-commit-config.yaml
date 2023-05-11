@@ -23,4 +23,4 @@ repos:
 
 ci:
   autofix_prs: false
-  skip: mypy  # too big for free tier with deps
+  skip: [mypy]  # too big for free tier with deps
