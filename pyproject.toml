@@ -28,6 +28,9 @@ write_to = "src/pyransame/_version.py"
 where = ["src"]
 namespaces = false
 
+[tool.mypy]
+files = ["src"]
+
 [tool.isort]
 profile = "black"
 
