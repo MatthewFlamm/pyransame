@@ -30,7 +30,7 @@ namespaces = false
 
 [tool.mypy]
 files = ["src"]
-strict = true
+plugins = "numpy.typing.mypy_plugin"
 
 [tool.isort]
 profile = "black"
