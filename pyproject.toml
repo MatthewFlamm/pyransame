@@ -30,6 +30,7 @@ namespaces = false
 
 [tool.mypy]
 files = ["src"]
+strict = true
 
 [tool.isort]
 profile = "black"

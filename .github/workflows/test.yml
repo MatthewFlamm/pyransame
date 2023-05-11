@@ -1,4 +1,4 @@
-name: Pytest
+name: Test
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
-
+  pytest:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
