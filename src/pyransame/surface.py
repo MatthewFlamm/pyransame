@@ -11,10 +11,10 @@ import pyransame.util as util
 
 
 def random_surface_points(
-    mesh: pv.core.dataset.DataSet,
+    mesh: pv.DataSet,
     n: int = 1,
     weights: Optional[Union[str, npt.ArrayLike]] = None,
-) -> npt.NDArray[np.float_]:
+) -> np.ndarray:
     """Generate random points on surface.
 
     Supported cell types:

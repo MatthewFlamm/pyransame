@@ -12,10 +12,10 @@ import pyransame.util as util
 
 
 def random_volume_points(
-    mesh: pv.core.dataset.DataSet,
+    mesh: pv.DataSet,
     n: int = 1,
     weights: Optional[Union[str, npt.ArrayLike]] = None,
-) -> npt.NDArray[np.float_]:
+) -> np.ndarray:
     """Generate random points in a volume.
 
     Supported cell types:

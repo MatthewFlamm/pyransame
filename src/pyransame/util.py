@@ -1,14 +1,11 @@
 """Utilities."""
 
 import numpy as np
-import numpy.typing as npt
 
 import pyransame
 
 
-def _generate_points_in_tri(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_tri(points: np.ndarray, n: int = 1) -> np.ndarray:
     a, b, c = points
     v1 = b - a
     v2 = c - a
@@ -19,7 +16,7 @@ def _generate_points_in_tri(
     return a + np.atleast_2d(r[:, 0]).T * v1 + np.atleast_2d(r[:, 1]).T * v2
 
 
-def _area_tri(points: npt.NDArray[np.float_]) -> float:
+def _area_tri(points: np.ndarray) -> float:
     pa, pb, pc = points
     a = np.linalg.norm(pb - pa)
     b = np.linalg.norm(pc - pb)
@@ -27,9 +24,7 @@ def _area_tri(points: npt.NDArray[np.float_]) -> float:
     return 1.0 / 4.0 * np.sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c))
 
 
-def _generate_points_in_tri_strip(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
     ntri = points.shape[0] - 2
 
     areas = np.empty(shape=ntri, dtype=float)
@@ -47,9 +42,7 @@ def _generate_points_in_tri_strip(
     return out
 
 
-def _generate_points_in_quad(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_quad(points: np.ndarray, n: int = 1) -> np.ndarray:
     tri1 = [0, 1, 2]
     tri2 = [0, 2, 3]
     area1 = _area_tri(points[tri1, :])
@@ -69,9 +62,7 @@ def _generate_points_in_quad(
     return out
 
 
-def _generate_points_in_polygon(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
     ntri = points.shape[0] - 2
 
     areas = np.empty(shape=ntri, dtype=float)
@@ -89,7 +80,7 @@ def _generate_points_in_polygon(
     return out
 
 
-def _tetra_random_coordinates(r: npt.NDArray[np.float_]) -> npt.NDArray[np.float_]:
+def _tetra_random_coordinates(r: np.ndarray) -> np.ndarray:
     if r[0:2].sum() > 1.0:
         r[0:2] = 1.0 - r[0:2]
 
@@ -105,9 +96,7 @@ def _tetra_random_coordinates(r: npt.NDArray[np.float_]) -> npt.NDArray[np.float
     return r
 
 
-def _generate_points_in_tetra(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_tetra(points: np.ndarray, n: int = 1) -> np.ndarray:
     a, b, c, d = points
     v0 = b - a
     v1 = c - a
@@ -124,7 +113,7 @@ def _generate_points_in_tetra(
     )
 
 
-def _area_tetra(points: npt.NDArray[np.float_]) -> float:
+def _area_tetra(points: np.ndarray) -> float:
     a = np.linalg.norm(points[0, :] - points[1, :])
     b = np.linalg.norm(points[0, :] - points[2, :])
     c = np.linalg.norm(points[0, :] - points[3, :])
@@ -148,9 +137,7 @@ def _area_tetra(points: npt.NDArray[np.float_]) -> float:
     )
 
 
-def _generate_points_in_pyramid(
-    points: npt.NDArray[np.float_], n: int = 1
-) -> npt.NDArray[np.float_]:
+def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
     tetra0 = [0, 1, 2, 4]
     tetra1 = [0, 2, 3, 4]
 
@@ -173,9 +160,9 @@ def _generate_points_in_pyramid(
 
 
 def _generate_points_in_voxel(
-    points: npt.NDArray[np.float_],
+    points: np.ndarray,
     n: int = 1,
-) -> npt.NDArray[np.float_]:
+) -> np.ndarray:
     a, b, c, _, e, _, _, _ = points
     v0 = b - a
     v1 = c - a
@@ -192,9 +179,9 @@ def _generate_points_in_voxel(
 
 
 def _generate_points_in_pixel(
-    points: npt.NDArray[np.float_],
+    points: np.ndarray,
     n: int = 1,
-) -> npt.NDArray[np.float_]:
+) -> np.ndarray:
     a, b, c, _ = points
     v0 = b - a
     v1 = c - a
