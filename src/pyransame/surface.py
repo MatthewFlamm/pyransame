@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from typing import Optional, Union
 
 import numpy as np
+import numpy.typing as npt
 import pyvista as pv
 
 import pyransame
@@ -12,7 +13,7 @@ import pyransame.util as util
 def random_surface_points(
     mesh: pv.DataSet,
     n: int = 1,
-    weights: Optional[Union[str, np.ndarray, Sequence]] = None,
+    weights: Optional[Union[str, npt.ArrayLike]] = None,
 ) -> np.ndarray:
     """Generate random points on surface.
 
@@ -34,12 +35,10 @@ def random_surface_points(
     n : int, default: 1
         Number of random points to generate
 
-    weights : str, or sequence-like, optional
+    weights : str, or array_like, optional
         Weights to use for probability of choosing points inside each cell.
 
         If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
-        If a ``sequence`` is supplied, it will add to the cell data using
-        ``weights`` key.
 
     Returns
     -------
@@ -69,11 +68,10 @@ def random_surface_points(
     if weights is None:
         weights = np.ones(mesh.n_cells)
 
-    if not isinstance(weights, (np.ndarray, Sequence, str)):
-        raise ValueError(f"Invalid weights, got {weights}")
-
     if isinstance(weights, str):
         weights = mesh.cell_data[weights]
+
+    weights = np.asanyarray(weights)
 
     if n <= 0:
         raise ValueError(f"n must be > 0, got {n}")
@@ -81,7 +79,7 @@ def random_surface_points(
     n_cells = mesh.n_cells
 
     if "Area" not in mesh.cell_data:
-        mesh = mesh.compute_cell_sizes(length=False, volume=False)
+        mesh = mesh.compute_cell_sizes(length=False, area=True, volume=False)  # type: ignore
 
     p = weights * mesh["Area"]
 
@@ -100,15 +98,15 @@ def random_surface_points(
         if c.type == pv.CellType.TRIANGLE:
             points[
                 point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_tri(*c.points, count)
+            ] = util._generate_points_in_tri(c.points, count)
         elif c.type == pv.CellType.PIXEL:
             points[
                 point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_pixel(*c.points, count)
+            ] = util._generate_points_in_pixel(c.points, count)
         elif c.type == pv.CellType.QUAD:
             points[
                 point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_quad(*c.points, count)
+            ] = util._generate_points_in_quad(c.points, count)
         elif c.type == pv.CellType.POLYGON:
             points[
                 point_indices[i] : point_indices[i + 1], :

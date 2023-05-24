@@ -35,6 +35,10 @@ write_to = "src/pyransame/_version.py"
 where = ["src"]
 namespaces = false
 
+[tool.mypy]
+files = ["src"]
+plugins = "numpy.typing.mypy_plugin"
+
 [tool.isort]
 profile = "black"
 
