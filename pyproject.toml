@@ -10,16 +10,23 @@ dependencies = [
     "pyvista>=0.38",
     "numpy",
 ]
-description = "My package description"
+description = "PYthon RAndom SAmpling for MEshes"
 readme = {file = "README.md", content-type = "text/markdown"}
-keywords = ["one", "two"]
+keywords = ["pyvista", "vtk", "numpy", "mesh", "sample"]
 license = {text = "MIT License"}
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
 ]
 authors = [
   {name = "Matthew Flamm", email = "matthewhflamm0@gmail.com"}
 ]
+
+[project.urls]
+"Repository" = "https://github.com/MatthewFlamm/pyransame"
+"Bug Tracker" = "https://github.com/MatthewFlamm/pyransame/issues"
+"Documentation" = "https://matthewflamm.github.io/pyransame/"
 
 [tool.setuptools_scm]
 write_to = "src/pyransame/_version.py"
