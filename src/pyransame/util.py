@@ -5,6 +5,14 @@ import numpy as np
 import pyransame
 
 
+def _random_cells(n_cells, n, p):
+    chosen = pyransame.rng.choice(n_cells, n, p=p)
+    chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
+    point_indices = np.zeros(shape=chosen_cells.size + 1, dtype=int)
+    point_indices[1:] = np.cumsum(unique_counts)
+    return chosen_cells, unique_counts, point_indices
+
+
 def _generate_points_in_tri(points: np.ndarray, n: int = 1) -> np.ndarray:
     a, b, c = points
     v1 = b - a
@@ -52,13 +60,18 @@ def _generate_points_in_quad(points: np.ndarray, n: int = 1) -> np.ndarray:
 
     p = np.array([area1, area2])
     p = p / p.sum()
-    r = pyransame.rng.choice(np.array([0, 1], dtype=int), size=n, p=p)
 
-    for i in range(n):
-        if r[i] == 0:
-            out[i, :] = _generate_points_in_tri(points[tri1, :])
+    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        if chosen_cell == 0:
+            out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tri(
+                points[tri1, :], n=count
+            )
         else:
-            out[i, :] = _generate_points_in_tri(points[tri2, :])
+            out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tri(
+                points[tri2, :], n=count
+            )
     return out
 
 

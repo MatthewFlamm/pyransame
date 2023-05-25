@@ -88,10 +88,7 @@ def random_surface_points(
 
     p = p / p.sum()
 
-    chosen = pyransame.rng.choice(n_cells, n, p=p)
-    chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
-    point_indices = np.zeros(shape=chosen_cells.size + 1, dtype=int)
-    point_indices[1:] = np.cumsum(unique_counts)
+    chosen_cells, unique_counts, point_indices = util._random_cells(n_cells, n, p)
     points = np.empty((n, 3))
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         c = mesh.get_cell(chosen_cell)
