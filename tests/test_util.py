@@ -17,6 +17,7 @@ from pyransame.util import (
     _generate_points_in_tri,
     _generate_points_in_tri_strip,
     _generate_points_in_voxel,
+    _generate_points_in_wedge,
 )
 
 
@@ -229,5 +230,21 @@ def test_uniformity_pyramid():
     center = np.array([0.0, 0.0, 0.25])
 
     points = _generate_points_in_pyramid(mesh.points, 2000000)
+
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_wedge():
+    a = np.array((0.0, 0.0, 0.0))
+    b = np.array((1.0, 0.0, 0.0))
+    c = np.array((0.5, np.sqrt(3.0) / 2.0, 0.0))
+    d = np.array((0.0, 0.0, 1.0))
+    e = np.array((1.0, 0.0, 1.0))
+    f = np.array((0.5, np.sqrt(3.0) / 2.0, 1.0))
+
+    center = np.array((0.5, np.sqrt(3.0) / 6.0, 0.5))
+
+    # needs a lot of points to converge
+    points = _generate_points_in_wedge(np.array([a, b, c, d, e, f]), 2000000)
 
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)

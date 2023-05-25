@@ -24,6 +24,7 @@ def random_volume_points(
     - Pyramid
     - Tetrahedron
     - Voxel
+    - Wedge
 
     All cells must be convex.
 
@@ -100,6 +101,10 @@ def random_volume_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = util._generate_points_in_pyramid(c.points, count)
+        elif c.type == CellType.WEDGE:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = util._generate_points_in_wedge(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
