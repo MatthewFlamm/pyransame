@@ -160,6 +160,16 @@ def _area_tetra(points: np.ndarray) -> float:
     )
 
 
+def _area_pyramid(points: np.ndarray):
+    tetra0 = [0, 1, 2, 4]
+    tetra1 = [0, 2, 3, 4]
+
+    area0 = _area_tetra(points[tetra0, :])
+    area1 = _area_tetra(points[tetra1, :])
+
+    return area0 + area1
+
+
 def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
     tetra0 = [0, 1, 2, 4]
     tetra1 = [0, 2, 3, 4]
@@ -217,3 +227,30 @@ def _generate_points_in_pixel(
     r = pyransame.rng.random(size=(n, 2))
 
     return a + np.atleast_2d(r[:, 0]).T * v0 + np.atleast_2d(r[:, 1]).T * v1
+
+
+def _generate_points_in_wedge(points: np.ndarray, n: int = 1) -> np.ndarray:
+    tetra = [0, 2, 1, 4]
+    pyramid = [0, 2, 5, 3, 4]
+
+    area0 = _area_tetra(points[tetra, :])
+    area1 = _area_pyramid(points[pyramid, :])
+
+    areas = np.array([area0, area1])
+
+    p = areas / areas.sum()
+    out = np.empty((n, 3))
+
+    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        if chosen_cell == 0:
+            out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tetra(
+                points[tetra, :], n=count
+            )
+        else:
+            out[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_pyramid(points[pyramid, :], n=count)
+
+    return out

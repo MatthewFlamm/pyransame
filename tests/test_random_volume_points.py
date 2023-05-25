@@ -5,6 +5,23 @@ import pyvista as pv
 import pyransame
 
 
+def make_wedge():
+    points = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.5, np.sqrt(3.0) / 2.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [1.0, 0.0, 1.0],
+            [0.5, np.sqrt(3.0) / 2.0, 1.0],
+        ]
+    )
+    celltypes = [pv.CellType.WEDGE]
+    cells = [6, 0, 1, 2, 3, 4, 5]
+
+    return pv.UnstructuredGrid(cells, celltypes, points)
+
+
 def test_cell_types():
     mesh = pv.UniformGrid(dimensions=(4, 4, 4))
     assert mesh.get_cell(0).type == pv.CellType.VOXEL
@@ -16,6 +33,10 @@ def test_cell_types():
 
     mesh = pv.Pyramid()
     assert mesh.get_cell(0).type == pv.CellType.PYRAMID
+    pyransame.random_volume_points(mesh, 20)
+
+    mesh = make_wedge()
+    assert mesh.get_cell(0).type == pv.CellType.WEDGE
     pyransame.random_volume_points(mesh, 20)
 
 
