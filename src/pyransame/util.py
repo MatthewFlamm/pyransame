@@ -42,10 +42,13 @@ def _generate_points_in_tri_strip(points: np.ndarray, n: int = 1) -> np.ndarray:
     out = np.empty((n, 3))
 
     p = areas / areas.sum()
-    r = pyransame.rng.choice(ntri, size=n, p=p)
 
-    for i in range(n):
-        out[i, :] = _generate_points_in_tri(points[r[i] : r[i] + 3, :])
+    chosen_cells, unique_counts, point_indices = _random_cells(ntri, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tri(
+            points[chosen_cell : chosen_cell + 3, :], n=count
+        )
 
     return out
 
@@ -86,7 +89,7 @@ def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
 
     p = areas / areas.sum()
 
-    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+    chosen_cells, unique_counts, point_indices = _random_cells(ntri, n, p)
 
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tri(
@@ -163,14 +166,19 @@ def _generate_points_in_pyramid(points: np.ndarray, n: int = 1) -> np.ndarray:
     areas = np.array([area0, area1])
 
     p = areas / areas.sum()
-    r = pyransame.rng.choice(2, size=n, p=p)
-
     out = np.empty((n, 3))
-    for i in range(n):
-        if r[i] == 0:
-            out[i, :] = _generate_points_in_tetra(points[tetra0, :])
+
+    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        if chosen_cell == 0:
+            out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tetra(
+                points[tetra0, :], n=count
+            )
         else:
-            out[i, :] = _generate_points_in_tetra(points[tetra1, :])
+            out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tetra(
+                points[tetra1, :], n=count
+            )
 
     return out
 
