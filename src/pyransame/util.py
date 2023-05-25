@@ -5,7 +5,9 @@ import numpy as np
 import pyransame
 
 
-def _random_cells(n_cells, n, p):
+def _random_cells(
+    n_cells: int, n: int, p: np.ndarray
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     chosen = pyransame.rng.choice(n_cells, n, p=p)
     chosen_cells, unique_counts = np.unique(chosen, return_counts=True)
     point_indices = np.zeros(shape=chosen_cells.size + 1, dtype=int)
