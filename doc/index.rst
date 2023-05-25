@@ -2,7 +2,7 @@ Welcome to pyransame's documentation!
 =====================================
 
 PYthon RAndom SAmpling for MEshes (pyransame) provides utilities
-for choosing rando samples of points within cells of
+for choosing random samples of points within cells of
 `PyVista <https://docs.pyvista.org/>`_ meshes.
 
 Examples
