@@ -40,3 +40,9 @@ pyvista.global_theme.font.size = 22
 pyvista.global_theme.font.label_size = 22
 pyvista.global_theme.font.title_size = 22
 pyvista.global_theme.return_cpos = False
+
+numpydoc_validation_checks = {
+    "all",
+    "RT02",  # name for single return
+    "SA01",  # do not require see also
+}
