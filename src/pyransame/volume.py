@@ -16,7 +16,8 @@ def random_volume_points(
     n: int = 1,
     weights: Optional[Union[str, npt.ArrayLike]] = None,
 ) -> np.ndarray:
-    """Generate random points in a volume.
+    """
+    Generate random points in a volume.
 
     Supported cell types:
 
@@ -32,7 +33,7 @@ def random_volume_points(
         The mesh for which to generate random points.  Must have cells.
 
     n : int, default: 1
-        Number of random points to generate
+        Number of random points to generate.
 
     weights : str, or array_like, optional
         Weights to use for probability of choosing points inside each cell.
