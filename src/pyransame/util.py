@@ -85,10 +85,13 @@ def _generate_points_in_polygon(points: np.ndarray, n: int = 1) -> np.ndarray:
     out = np.empty((n, 3))
 
     p = areas / areas.sum()
-    r = pyransame.rng.choice(ntri, size=n, p=p)
 
-    for i in range(n):
-        out[i, :] = _generate_points_in_tri(points[[0, r[i] + 1, r[i] + 2], :])
+    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tri(
+            points[[0, chosen_cell + 1, chosen_cell + 2], :], n=count
+        )
 
     return out
 
