@@ -9,6 +9,7 @@ from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
 
 from pyransame.util import (
+    _generate_points_in_hexahedron,
     _generate_points_in_pixel,
     _generate_points_in_polygon,
     _generate_points_in_pyramid,
@@ -247,4 +248,24 @@ def test_uniformity_wedge():
     # needs a lot of points to converge
     points = _generate_points_in_wedge(np.array([a, b, c, d, e, f]), 2000000)
 
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_hexahedra():
+    p = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [1.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 1.0, 0.0],
+            [1.0, 1.0, 1.0],
+            [0.0, 1.0, 1.0],
+        ]
+    )
+
+    center = np.array([0.5, 0.5, 0.5])
+
+    points = _generate_points_in_hexahedron(p, 2000000)
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)

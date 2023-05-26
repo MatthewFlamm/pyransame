@@ -22,6 +22,24 @@ def make_wedge():
     return pv.UnstructuredGrid(cells, celltypes, points)
 
 
+def make_hexahedron():
+    points = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [1.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 1.0, 0.0],
+            [1.0, 1.0, 1.0],
+            [0.0, 1.0, 1.0],
+        ]
+    )
+    celltypes = [pv.CellType.HEXAHEDRON]
+    cells = [8, 0, 1, 2, 3, 4, 5, 6, 7]
+    return pv.UnstructuredGrid(cells, celltypes, points)
+
+
 def test_cell_types():
     mesh = pv.UniformGrid(dimensions=(4, 4, 4))
     assert mesh.get_cell(0).type == pv.CellType.VOXEL
@@ -37,6 +55,10 @@ def test_cell_types():
 
     mesh = make_wedge()
     assert mesh.get_cell(0).type == pv.CellType.WEDGE
+    pyransame.random_volume_points(mesh, 20)
+
+    mesh = make_hexahedron()
+    assert mesh.get_cell(0).type == pv.CellType.HEXAHEDRON
     pyransame.random_volume_points(mesh, 20)
 
 

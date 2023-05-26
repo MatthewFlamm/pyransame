@@ -254,3 +254,27 @@ def _generate_points_in_wedge(points: np.ndarray, n: int = 1) -> np.ndarray:
             ] = _generate_points_in_pyramid(points[pyramid, :], n=count)
 
     return out
+
+
+def _generate_points_in_hexahedron(points: np.ndarray, n: int = 1) -> np.ndarray:
+    tetras = [
+        [0, 1, 4, 3],
+        [3, 7, 6, 4],
+        [1, 5, 4, 6],
+        [2, 3, 6, 1],
+        [3, 1, 6, 4],
+    ]
+
+    areas = np.array([_area_tetra(points[tetra, :]) for tetra in tetras])
+
+    p = areas / areas.sum()
+    out = np.empty((n, 3))
+
+    chosen_cells, unique_counts, point_indices = _random_cells(5, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tetra(
+            points[tetras[chosen_cell], :], n=count
+        )
+
+    return out

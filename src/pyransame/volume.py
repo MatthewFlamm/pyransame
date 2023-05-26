@@ -21,6 +21,7 @@ def random_volume_points(
 
     Supported cell types:
 
+    - Hexahedron
     - Pyramid
     - Tetrahedron
     - Voxel
@@ -105,9 +106,12 @@ def random_volume_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = util._generate_points_in_wedge(c.points, count)
+        elif c.type == CellType.HEXAHEDRON:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = util._generate_points_in_hexahedron(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
             )
-
     return points
