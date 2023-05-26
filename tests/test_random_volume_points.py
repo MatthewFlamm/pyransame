@@ -57,7 +57,7 @@ def test_cell_types():
     assert mesh.get_cell(0).type == pv.CellType.WEDGE
     pyransame.random_volume_points(mesh, 20)
 
-    hexa = make_hexahedron()
+    mesh = make_hexahedron()
     assert mesh.get_cell(0).type == pv.CellType.HEXAHEDRON
     pyransame.random_volume_points(mesh, 20)
 
