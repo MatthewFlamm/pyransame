@@ -40,6 +40,20 @@ def make_hexahedron():
     return pv.UnstructuredGrid(cells, celltypes, points)
 
 
+def make_pentagonal_prism():
+    angles = np.arange(5) * 2 * np.pi / 5  # angles of regular pentagon in radians
+    p = np.zeros(shape=(10, 3))
+    np.sin(angles, out=p[0:5, 0])
+    np.cos(angles, out=p[0:5, 1])
+
+    np.sin(angles, out=p[5:, 0])
+    np.cos(angles, out=p[5:, 1])
+    p[5:, 2] = 1.0
+    celltypes = [pv.CellType.PENTAGONAL_PRISM]
+    cells = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    return pv.UnstructuredGrid(cells, celltypes, p)
+
+
 def test_cell_types():
     mesh = pv.UniformGrid(dimensions=(4, 4, 4))
     assert mesh.get_cell(0).type == pv.CellType.VOXEL
@@ -59,6 +73,10 @@ def test_cell_types():
 
     mesh = make_hexahedron()
     assert mesh.get_cell(0).type == pv.CellType.HEXAHEDRON
+    pyransame.random_volume_points(mesh, 20)
+
+    mesh = make_pentagonal_prism()
+    assert mesh.get_cell(0).type == pv.CellType.PENTAGONAL_PRISM
     pyransame.random_volume_points(mesh, 20)
 
 

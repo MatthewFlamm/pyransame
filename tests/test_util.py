@@ -10,6 +10,7 @@ from hypothesis.extra.numpy import arrays
 
 from pyransame.util import (
     _generate_points_in_hexahedron,
+    _generate_points_in_pentagonal_prism,
     _generate_points_in_pixel,
     _generate_points_in_polygon,
     _generate_points_in_pyramid,
@@ -268,4 +269,19 @@ def test_uniformity_hexahedra():
     center = np.array([0.5, 0.5, 0.5])
 
     points = _generate_points_in_hexahedron(p, 2000000)
+    assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_pentagonal_prism():
+    angles = np.arange(5) * 2 * np.pi / 5  # angles of regular pentagon in radians
+    p = np.zeros(shape=(10, 3))
+    np.sin(angles, out=p[0:5, 0])
+    np.cos(angles, out=p[0:5, 1])
+
+    np.sin(angles, out=p[5:, 0])
+    np.cos(angles, out=p[5:, 1])
+    p[5:, 2] = 1.0
+
+    center = np.array([0.0, 0.0, 0.5])
+    points = _generate_points_in_pentagonal_prism(p, 2000000)
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
