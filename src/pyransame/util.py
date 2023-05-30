@@ -322,3 +322,32 @@ def _generate_points_in_pentagonal_prism(points: np.ndarray, n: int = 1) -> np.n
             ] = _generate_points_in_hexahedron(points[hexahedron, :], n=count)
 
     return out
+
+
+def _generate_points_in_hexagonal_prism(points: np.ndarray, n: int = 1) -> np.ndarray:
+    hexahedron0 = [0, 1, 2, 5, 6, 7, 8, 11]
+    hexahedron1 = [5, 2, 3, 4, 11, 8, 9, 10]
+
+    areas = np.array(
+        [
+            _area_hexahedron(points[hexahedron0, :]),
+            _area_hexahedron(points[hexahedron1, :]),
+        ]
+    )
+
+    p = areas / areas.sum()
+    out = np.empty((n, 3))
+
+    chosen_cells, unique_counts, point_indices = _random_cells(2, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        if chosen_cell == 0:
+            out[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_hexahedron(points[hexahedron0, :], n=count)
+        else:
+            out[
+                point_indices[i] : point_indices[i + 1], :
+            ] = _generate_points_in_hexahedron(points[hexahedron1, :], n=count)
+
+    return out

@@ -21,6 +21,7 @@ def random_volume_points(
 
     Supported cell types:
 
+    - Hexagonal Prism
     - Hexahedron
     - Pentagonal Prism
     - Pyramid
@@ -115,6 +116,10 @@ def random_volume_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = util._generate_points_in_pentagonal_prism(c.points, count)
+        elif c.type == CellType.HEXAGONAL_PRISM:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = util._generate_points_in_hexagonal_prism(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
