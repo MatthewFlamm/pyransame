@@ -62,8 +62,8 @@ def random_surface_points(
     ...     (0.04, 1.0, -0.2),
     ... ]
     >>> pl = pv.Plotter()
-    >>> pl.add_mesh(mesh, color='tan')
-    >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> _ = pl.add_mesh(mesh, color='tan')
+    >>> _ = pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
     >>> pl.show(cpos=cpos)
     """
     if weights is None:

@@ -57,9 +57,9 @@ def random_volume_points(
     Now plot result.
 
     >>> pl = pv.Plotter()
-    >>> pl.add_mesh(mesh, style='wireframe')
-    >>> pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
-    >>> pl.show(cpos=cpos)
+    >>> _ = pl.add_mesh(mesh, style='wireframe')
+    >>> _ = pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> pl.show()
     """
     if weights is None:
         weights = np.ones(mesh.n_cells)
