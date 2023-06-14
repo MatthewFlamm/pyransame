@@ -3,6 +3,8 @@
 from typing import Tuple
 
 import numpy as np
+import pyvista as pv
+from vtk import mutable  # type: ignore
 
 import pyransame
 
@@ -349,5 +351,43 @@ def _generate_points_in_hexagonal_prism(points: np.ndarray, n: int = 1) -> np.nd
             out[
                 point_indices[i] : point_indices[i + 1], :
             ] = _generate_points_in_hexahedron(points[hexahedron1, :], n=count)
+
+    return out
+
+
+def _generate_points_in_polyhedron(cell: pv.Cell, n: int = 1) -> np.ndarray:
+    faces = cell.faces
+
+    # version >0.39 pyvista could be used in the future
+    para_center = [0.0, 0.0, 0.0]
+    sub_id = cell.GetParametricCenter(para_center)
+    # EvaluateLocation requires mutable sub_id
+    sub_id = mutable(sub_id)
+    # center and weights are returned from EvaluateLocation
+    cell_center = [0.0, 0.0, 0.0]
+    weights = [0.0] * cell.n_points
+    cell.EvaluateLocation(sub_id, para_center, cell_center, weights)
+
+    tetras = []
+
+    for face in faces:
+        face_points = face.points
+        ntri = face_points.shape[0] - 2
+        for i in range(ntri):
+            tetra = face_points[[0, i + 1, i + 2], :]
+            tetra = np.append(tetra, [cell_center], axis=0)
+            tetras.append(tetra)
+
+    areas = np.array([_area_tetra(tetra) for tetra in tetras])
+
+    p = areas / areas.sum()
+    out = np.empty((n, 3))
+
+    chosen_cells, unique_counts, point_indices = _random_cells(len(tetras), n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_tetra(
+            tetras[chosen_cell], n=count
+        )
 
     return out

@@ -68,6 +68,27 @@ def make_hexagonal_prism():
     return pv.UnstructuredGrid(cells, celltypes, p)
 
 
+def make_polyhedron():
+    dodecahedron_poly = pv.Dodecahedron()
+
+    faces = []
+    for cell in dodecahedron_poly.cell:
+        faces.append(cell.point_ids)
+
+    faces = []
+    faces.append(dodecahedron_poly.n_cells)
+    for cell in dodecahedron_poly.cell:
+        point_ids = cell.point_ids
+        faces.append(len(point_ids))
+        [faces.append(id) for id in point_ids]
+
+    faces.insert(0, len(faces))
+
+    return pv.UnstructuredGrid(
+        faces, [pv.CellType.POLYHEDRON], dodecahedron_poly.points
+    )
+
+
 def test_cell_types():
     mesh = pv.UniformGrid(dimensions=(4, 4, 4))
     assert mesh.get_cell(0).type == pv.CellType.VOXEL
@@ -95,6 +116,10 @@ def test_cell_types():
 
     mesh = make_hexagonal_prism()
     assert mesh.get_cell(0).type == pv.CellType.HEXAGONAL_PRISM
+    pyransame.random_volume_points(mesh, 20)
+
+    mesh = make_polyhedron()
+    assert mesh.get_cell(0).type == pv.CellType.POLYHEDRON
     pyransame.random_volume_points(mesh, 20)
 
 

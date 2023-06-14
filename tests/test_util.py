@@ -7,6 +7,7 @@ import pyvista as pv
 from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
+from vtk import VTK_POLYHEDRON, vtkIdList, vtkPoints, vtkUnstructuredGrid
 
 from pyransame.util import (
     _generate_points_in_hexagonal_prism,
@@ -14,6 +15,7 @@ from pyransame.util import (
     _generate_points_in_pentagonal_prism,
     _generate_points_in_pixel,
     _generate_points_in_polygon,
+    _generate_points_in_polyhedron,
     _generate_points_in_pyramid,
     _generate_points_in_quad,
     _generate_points_in_tetra,
@@ -301,3 +303,28 @@ def test_uniformity_hexagonal_prism():
     center = np.array([0.0, 0.0, 0.5])
     points = _generate_points_in_hexagonal_prism(p, 2000000)
     assert np.allclose(points.mean(axis=0), center, rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_polyhedron():
+    dodecahedron_poly = pv.Dodecahedron()
+
+    faces = []
+    for cell in dodecahedron_poly.cell:
+        faces.append(cell.point_ids)
+
+    faces = []
+    faces.append(dodecahedron_poly.n_cells)
+    for cell in dodecahedron_poly.cell:
+        point_ids = cell.point_ids
+        faces.append(len(point_ids))
+        [faces.append(id) for id in point_ids]
+
+    faces.insert(0, len(faces))
+
+    mesh = pv.UnstructuredGrid(
+        faces, [pv.CellType.POLYHEDRON], dodecahedron_poly.points
+    )
+
+    points = _generate_points_in_polyhedron(mesh.get_cell(0), 2000000)
+
+    assert np.allclose(points.mean(axis=0), np.array(mesh.center), rtol=1e-3, atol=1e-3)
