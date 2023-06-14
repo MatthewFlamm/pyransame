@@ -4,7 +4,7 @@ from typing import Tuple
 
 import numpy as np
 import pyvista as pv
-from vtk import mutable
+from vtk import mutable  # type: ignore
 
 import pyransame
 
