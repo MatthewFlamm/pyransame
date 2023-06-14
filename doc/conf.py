@@ -30,6 +30,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
 
+html_theme_options = {"github_url": "https://github.com/MatthewFlamm/pyransame"}
+
 import pyvista
 
 pyvista.OFF_SCREEN = True
