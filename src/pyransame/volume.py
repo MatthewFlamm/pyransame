@@ -24,6 +24,7 @@ def random_volume_points(
     - Hexagonal Prism
     - Hexahedron
     - Pentagonal Prism
+    - Polyhedron
     - Pyramid
     - Tetrahedron
     - Voxel
