@@ -1,4 +1,4 @@
 pytest==7.4.0
 pytest-cov==4.1.0
-hypothesis==6.79.1
+hypothesis==6.79.3
 mypy==1.4.1
