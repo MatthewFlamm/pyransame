@@ -1,4 +1,4 @@
 numpydoc==1.5.0
 pydata-sphinx-theme==0.13.3
-pyvista[trame]==0.40.0
+git+https://github.com/pyvista/pyvista@vtksz-export
 sphinx==7.0.1
