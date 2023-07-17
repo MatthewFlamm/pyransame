@@ -39,7 +39,7 @@ jobs:
       - name: Build documentation
         run: make -C doc html
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: doc/_build/html
 
