@@ -54,7 +54,7 @@ def random_volume_points(
     --------
     >>> import pyransame
     >>> import pyvista as pv
-    >>> mesh = pv.UniformGrid(dimensions=(11, 11, 11))
+    >>> mesh = pv.ImageData(dimensions=(11, 11, 11))
     >>> points = pyransame.random_volume_points(mesh, n=500)
 
     Now plot result.
@@ -130,3 +130,62 @@ def random_volume_points(
                 f"Random generation for {c.type.name} not yet supported"
             )
     return points
+
+
+def random_volume_dataset(
+    mesh: pv.DataSet,
+    n: int = 1,
+    weights: Optional[Union[str, npt.ArrayLike]] = None,
+) -> pv.PolyData:
+    """
+    Generate random points in a volume with sampled data.
+
+    Supported cell types:
+
+    - Hexagonal Prism
+    - Hexahedron
+    - Pentagonal Prism
+    - Polyhedron
+    - Pyramid
+    - Tetrahedron
+    - Voxel
+    - Wedge
+
+    All cells must be convex.
+
+    Parameters
+    ----------
+    mesh : pyvista.DataSet
+        The mesh for which to generate random points.  Must have cells.
+
+    n : int, default: 1
+        Number of random points to generate.
+
+    weights : str, or array_like, optional
+        Weights to use for probability of choosing points inside each cell.
+
+        If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
+
+    Returns
+    -------
+    mesh : pv.PolyData
+        ``(n, 3)`` points that exist inside cells on ``mesh`` and with
+        sampled data.
+
+    Examples
+    --------
+    >>> import pyransame
+    >>> import pyvista as pv
+    >>> mesh = pv.ImageData(dimensions=(11, 11, 11))
+    >>> mesh['y'] = mesh.points[:, 1]
+    >>> points = pyransame.random_volume_dataset(mesh, n=500)
+
+    Now plot result.
+
+    >>> pl = pv.Plotter()
+    >>> _ = pl.add_mesh(mesh, style='wireframe')
+    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> pl.show()
+    """
+    points = random_volume_points(mesh, n, weights)
+    return pv.PolyData(points).sample(mesh)

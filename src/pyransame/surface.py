@@ -118,3 +118,65 @@ def random_surface_points(
                 f"Random generation for {c.type.name} not yet supported"
             )
     return points
+
+
+def random_surface_dataset(
+    mesh: pv.DataSet,
+    n: int = 1,
+    weights: Optional[Union[str, npt.ArrayLike]] = None,
+) -> pv.PolyData:
+    """
+    Generate random points on surface with sampled data
+
+    Supported cell types:
+
+    - Triangle
+    - Triangle Strip
+    - Pixel
+    - Polygon
+    - Quad
+
+    All cells must be convex.
+
+    Parameters
+    ----------
+    mesh : pyvista.DataSet
+        The mesh for which to generate random points.  Must have cells.
+
+    n : int, default: 1
+        Number of random points to generate.
+
+    weights : str, or array_like, optional
+        Weights to use for probability of choosing points inside each cell.
+
+        If a ``str`` is supplied, it will use the existing cell data on ``mesh``.
+
+    Returns
+    -------
+    points : pv.PolyData
+        ``(n, 3)`` points that exist inside cells on ``mesh`` and with
+        sampled data.
+
+    Examples
+    --------
+    >>> import pyransame
+    >>> import pyvista as pv
+    >>> from pyvista import examples
+    >>> mesh = examples.download_bunny()
+    >>> mesh['y'] = mesh.points[:, 1]
+    >>> points = pyransame.random_surface_dataset(mesh, n=500)
+
+    Now plot result.
+
+    >>> cpos = [
+    ...     (-0.07, 0.2, 0.5),
+    ...     (-0.02, 0.1, -0.0),
+    ...     (0.04, 1.0, -0.2),
+    ... ]
+    >>> pl = pv.Plotter()
+    >>> _ = pl.add_mesh(mesh, color='tan')
+    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> pl.show(cpos=cpos)
+    """
+    points = random_surface_points(mesh, n, weights)
+    return pv.PolyData(points).sample(mesh)
