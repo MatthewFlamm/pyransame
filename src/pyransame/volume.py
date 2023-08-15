@@ -184,7 +184,7 @@ def random_volume_dataset(
 
     >>> pl = pv.Plotter()
     >>> _ = pl.add_mesh(mesh, style='wireframe')
-    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0)
     >>> pl.show()
     """
     points = random_volume_points(mesh, n, weights)

@@ -126,7 +126,7 @@ def random_surface_dataset(
     weights: Optional[Union[str, npt.ArrayLike]] = None,
 ) -> pv.PolyData:
     """
-    Generate random points on surface with sampled data
+    Generate random points on surface with sampled data.
 
     Supported cell types:
 
@@ -175,7 +175,7 @@ def random_surface_dataset(
     ... ]
     >>> pl = pv.Plotter()
     >>> _ = pl.add_mesh(mesh, color='tan')
-    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0, color='red')
+    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0)
     >>> pl.show(cpos=cpos)
     """
     points = random_surface_points(mesh, n, weights)
