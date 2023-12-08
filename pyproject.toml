@@ -7,7 +7,7 @@ dynamic = ["version"]
 name = "pyransame"
 requires-python = ">=3.8"
 dependencies = [
-    "pyvista>=0.38",
+    "pyvista>=0.42",
     "numpy",
 ]
 description = "PYthon RAndom SAmpling for MEshes"
@@ -43,4 +43,5 @@ plugins = "numpy.typing.mypy_plugin"
 profile = "black"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "src"]
+addopts = "--doctest-modules"

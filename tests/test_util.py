@@ -212,7 +212,7 @@ def test_uniformity_pixel():
 
 
 def test_uniformity_voxel():
-    mesh = pv.UniformGrid(dimensions=(2, 2, 2), spacing=(1.0, 1.0, 2.0))
+    mesh = pv.ImageData(dimensions=(2, 2, 2), spacing=(1.0, 1.0, 2.0))
 
     # needs a lot of points to converge
     points = _generate_points_in_voxel(mesh.points, 2000000)
