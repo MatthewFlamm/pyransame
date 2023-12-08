@@ -1,5 +1,4 @@
 """Generating random points on a 2D surface."""
-from collections.abc import Sequence
 from typing import Optional, Union
 
 import numpy as np
@@ -179,4 +178,4 @@ def random_surface_dataset(
     >>> pl.show(cpos=cpos)
     """
     points = random_surface_points(mesh, n, weights)
-    return pv.PolyData(points).sample(mesh)
+    return pv.PolyData(points).sample(mesh, locator="static_cell")
