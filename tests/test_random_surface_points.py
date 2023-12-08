@@ -21,7 +21,7 @@ def test_cell_types():
     assert mesh.get_cell(0).type == pv.CellType.POLYGON
     pyransame.random_surface_points(mesh, 20)
 
-    mesh = pv.UniformGrid(dimensions=(4, 4, 1))
+    mesh = pv.ImageData(dimensions=(4, 4, 1))
     assert mesh.get_cell(0).type == pv.CellType.PIXEL
     pyransame.random_surface_points(mesh, 20)
 
@@ -46,7 +46,7 @@ def test_cell_types():
 def test_mixed_types():
     # as long as there are 2D cells, we should be able to sample even if there are other cell types
     # adds a 2D Quad to a Voxel only mesh
-    uniform_mesh = pv.UniformGrid(dimensions=(4, 4, 4)).cast_to_unstructured_grid()
+    uniform_mesh = pv.ImageData(dimensions=(4, 4, 4)).cast_to_unstructured_grid()
     points = uniform_mesh.points.copy()
     cells = uniform_mesh.cells.copy()
     cell_types = uniform_mesh.celltypes.copy()
@@ -57,7 +57,7 @@ def test_mixed_types():
 
 
 def test_unsupported_types():
-    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    mesh = pv.ImageData(dimensions=(4, 4, 4))
     assert all([c.type == pv.CellType.VOXEL for c in mesh.cell])
     with pytest.raises(ValueError, match="No cells with area in DataSet"):
         pyransame.random_surface_points(mesh, 20)

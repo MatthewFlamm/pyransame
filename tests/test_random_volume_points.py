@@ -90,11 +90,11 @@ def make_polyhedron():
 
 
 def test_cell_types():
-    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    mesh = pv.ImageData(dimensions=(4, 4, 4))
     assert mesh.get_cell(0).type == pv.CellType.VOXEL
     pyransame.random_volume_points(mesh, 20)
 
-    mesh = pv.UniformGrid(dimensions=(4, 4, 4)).to_tetrahedra()
+    mesh = pv.ImageData(dimensions=(4, 4, 4)).to_tetrahedra()
     assert mesh.get_cell(0).type == pv.CellType.TETRA
     pyransame.random_volume_points(mesh, 20)
 
@@ -126,7 +126,7 @@ def test_cell_types():
 def test_mixed_types():
     # as long as there are 3D cells, we should be able to sample even if there are other cell types
     # adds a 2D Quad to a Voxel only mesh
-    uniform_mesh = pv.UniformGrid(dimensions=(4, 4, 4)).cast_to_unstructured_grid()
+    uniform_mesh = pv.ImageData(dimensions=(4, 4, 4)).cast_to_unstructured_grid()
     points = uniform_mesh.points.copy()
     cells = uniform_mesh.cells.copy()
     cell_types = uniform_mesh.celltypes.copy()
@@ -137,14 +137,14 @@ def test_mixed_types():
 
 
 def test_unsupported_types():
-    mesh = pv.UniformGrid(dimensions=(4, 4, 1))
+    mesh = pv.ImageData(dimensions=(4, 4, 1))
     assert all([c.type == pv.CellType.PIXEL for c in mesh.cell])
     with pytest.raises(ValueError, match="No cells with volume in DataSet"):
         pyransame.random_volume_points(mesh, 20)
 
 
 def test_square_plane_voxel():
-    mesh = pv.UniformGrid(dimensions=(11, 11, 11))
+    mesh = pv.ImageData(dimensions=(11, 11, 11))
     points = pyransame.random_volume_points(mesh, 200000)
     assert points.shape == (200000, 3)
     assert isinstance(points, np.ndarray)
@@ -152,13 +152,13 @@ def test_square_plane_voxel():
 
 
 def test_small_sample():
-    mesh = pv.UniformGrid(dimensions=(11, 11, 11))
+    mesh = pv.ImageData(dimensions=(11, 11, 11))
     points = pyransame.random_volume_points(mesh, 2)
     assert points.shape == (2, 3)
     assert isinstance(points, np.ndarray)
 
 
-def test_nonuniformgrid_voxel():
+def test_nonImageData_voxel():
     x = np.array([-1.0, 0.0, 2.0])
     y = np.array([-1.0, 1.0])
     z = np.array([-1.0, 1.0])
@@ -182,14 +182,14 @@ def test_weights_voxel():
 
 
 def test_square_plane_tetra():
-    mesh = pv.UniformGrid(dimensions=(11, 11, 11)).to_tetrahedra()
+    mesh = pv.ImageData(dimensions=(11, 11, 11)).to_tetrahedra()
     points = pyransame.random_volume_points(mesh, 200000)
     assert points.shape == (200000, 3)
     assert isinstance(points, np.ndarray)
     assert np.allclose(points.mean(axis=0), (5.0, 5.0, 5.0), rtol=5e-3, atol=5e-3)
 
 
-def test_nonuniformgrid_tetra():
+def test_nonImageData_tetra():
     x = np.array([-1.0, 0.0, 2.0])
     y = np.array([-1.0, 1.0])
     z = np.array([-1.0, 1.0])
@@ -213,7 +213,7 @@ def test_weights_tetra():
 
 
 def test_wrong_weights():
-    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    mesh = pv.ImageData(dimensions=(4, 4, 4))
     weights = {"not a good entry": "should raise an error"}
 
     with pytest.raises(TypeError):
@@ -221,7 +221,7 @@ def test_wrong_weights():
 
 
 def test_wrong_n():
-    mesh = pv.UniformGrid(dimensions=(4, 4, 4))
+    mesh = pv.ImageData(dimensions=(4, 4, 4))
 
     with pytest.raises(ValueError, match="n must be > 0, got -20"):
         pyransame.random_volume_points(mesh, -20)
