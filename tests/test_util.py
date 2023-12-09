@@ -12,6 +12,7 @@ from vtk import VTK_POLYHEDRON, vtkIdList, vtkPoints, vtkUnstructuredGrid
 from pyransame.util import (
     _generate_points_in_hexagonal_prism,
     _generate_points_in_hexahedron,
+    _generate_points_in_line,
     _generate_points_in_pentagonal_prism,
     _generate_points_in_pixel,
     _generate_points_in_polygon,
@@ -328,3 +329,11 @@ def test_uniformity_polyhedron():
     points = _generate_points_in_polyhedron(mesh.get_cell(0), 2000000)
 
     assert np.allclose(points.mean(axis=0), np.array(mesh.center), rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_line():
+    line = pv.examples.cells.Line()
+
+    points = _generate_points_in_line(line.points, 200000)
+
+    assert np.allclose(points.mean(axis=0), np.array(line.center), rtol=1e-3, atol=1e-3)

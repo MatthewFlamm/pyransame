@@ -391,3 +391,9 @@ def _generate_points_in_polyhedron(cell: pv.Cell, n: int = 1) -> np.ndarray:
         )
 
     return out
+
+
+def _generate_points_in_line(points: np.ndarray, n: int = 1):
+    a, b = points
+    r = pyransame.rng.random(size=(1, n))
+    return a + (b - a) * np.atleast_2d(r).T
