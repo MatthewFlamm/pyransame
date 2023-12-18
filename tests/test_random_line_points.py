@@ -19,9 +19,26 @@ def nonuniform_line():
     return pv.PolyData(points, lines=[2, 0, 1, 2, 1, 2])
 
 
-def test_cell_types(line):
+@pytest.fixture
+def polyline():
+    points = np.array(
+        [
+            [-2.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0],
+            [1.0, 1.0, 0.0],
+            [1.0, 2.0, 0.0],
+        ]
+    )
+    return pv.PolyData(points, lines=[3, 0, 1, 2, 3, 2, 3, 4])
+
+
+def test_cell_types(line, polyline):
     assert line.get_cell(0).type == pv.CellType.LINE
     pyransame.random_line_points(line, 20)
+
+    assert polyline.get_cell(0).type == pv.CellType.POLY_LINE
+    pyransame.random_line_points(polyline, 20)
 
 
 def test_mixed_types():

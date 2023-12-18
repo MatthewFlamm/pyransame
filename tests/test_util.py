@@ -17,6 +17,7 @@ from pyransame.util import (
     _generate_points_in_pixel,
     _generate_points_in_polygon,
     _generate_points_in_polyhedron,
+    _generate_points_in_polyline,
     _generate_points_in_pyramid,
     _generate_points_in_quad,
     _generate_points_in_tetra,
@@ -337,3 +338,13 @@ def test_uniformity_line():
     points = _generate_points_in_line(line.points, 200000)
 
     assert np.allclose(points.mean(axis=0), np.array(line.center), rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_polyline():
+    polyline = pv.PolyData(
+        np.array([[0.0, 0.0, 0.0], [1, 0.0, 0.0], [1, 1.0, 0.0]]), lines=[3, 0, 1, 2]
+    )
+
+    points = _generate_points_in_polyline(polyline.points, 200000)
+
+    assert np.allclose(points.mean(axis=0), [0.75, 0.25, 0.0], rtol=1e-3, atol=1e-3)

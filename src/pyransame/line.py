@@ -90,6 +90,10 @@ def random_line_points(
             points[
                 point_indices[i] : point_indices[i + 1], :
             ] = util._generate_points_in_line(c.points, count)
+        elif c.type == pv.CellType.POLY_LINE:
+            points[
+                point_indices[i] : point_indices[i + 1], :
+            ] = util._generate_points_in_polyline(c.points, count)
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
