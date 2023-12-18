@@ -345,6 +345,6 @@ def test_uniformity_polyline():
         np.array([[0.0, 0.0, 0.0], [1, 0.0, 0.0], [1, 1.0, 0.0]]), lines=[3, 0, 1, 2]
     )
 
-    points = _generate_points_in_polyline(polyline.points, 200000)
+    points = _generate_points_in_polyline(polyline.points, 1000000)
 
     assert np.allclose(points.mean(axis=0), [0.75, 0.25, 0.0], rtol=1e-3, atol=1e-3)
