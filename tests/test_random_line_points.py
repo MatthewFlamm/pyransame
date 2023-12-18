@@ -61,6 +61,11 @@ def test_unsupported_types():
         pyransame.random_line_points(mesh, 20)
 
 
+def test_negative_number(line):
+    with pytest.raises(ValueError, match="n must be > 0"):
+        pyransame.random_line_points(line, -20)
+
+
 def test_straight_line(line):
     points = pyransame.random_line_points(line, 200000)
     assert points.shape == (200000, 3)
