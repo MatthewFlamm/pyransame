@@ -20,6 +20,7 @@ def random_line_points(
     Supported cell types:
 
     - Line
+    - Polyline
 
     Parameters
     ----------
@@ -48,8 +49,8 @@ def random_line_points(
     ...       [1., 0., 0.],
     ...       [1., 2., 0.]
     ... ]
-    >>> mesh = pv.PolyData(p, lines=[2, 0, 1, 2, 1, 2]
-    >>> points = pyransame.random_surface_points(mesh, n=5)
+    >>> mesh = pv.PolyData(p, lines=[2, 0, 1, 2, 1, 2])
+    >>> points = pyransame.random_line_points(mesh, n=25)
 
     Now plot result.
 
@@ -57,7 +58,7 @@ def random_line_points(
     >>> _ = pl.add_mesh(mesh, color='tan')
     >>> _ = pl.add_points(points, render_points_as_spheres=True, point_size=10.0, color='red')
     >>> pl.view_xy()
-    >>> pl.show(cpos=cpos)
+    >>> pl.show()
     """
     if weights is None:
         weights = np.ones(mesh.n_cells)
@@ -107,15 +108,12 @@ def random_line_dataset(
     weights: Optional[Union[str, npt.ArrayLike]] = None,
 ) -> pv.PolyData:
     """
-    Generate random points on surface with sampled data.
+    Generate random points on lines with sampled data.
 
     Supported cell types:
 
-    - Triangle
-    - Triangle Strip
-    - Pixel
-    - Polygon
-    - Quad
+    - Line
+    - Polyline
 
     All cells must be convex.
 
@@ -142,22 +140,28 @@ def random_line_dataset(
     --------
     >>> import pyransame
     >>> import pyvista as pv
-    >>> from pyvista import examples
-    >>> mesh = examples.download_bunny()
+    >>> p = [
+    ...       [0., 0., 0.],
+    ...       [1., 0., 0.],
+    ...       [1., 2., 0.]
+    ... ]
+    >>> mesh = pv.PolyData(p, lines=[2, 0, 1, 2, 1, 2])
     >>> mesh['y'] = mesh.points[:, 1]
-    >>> points = pyransame.random_surface_dataset(mesh, n=500)
+    >>> points = pyransame.random_line_dataset(mesh, n=25)
 
     Now plot result.
 
-    >>> cpos = [
-    ...     (-0.07, 0.2, 0.5),
-    ...     (-0.02, 0.1, -0.0),
-    ...     (0.04, 1.0, -0.2),
-    ... ]
     >>> pl = pv.Plotter()
     >>> _ = pl.add_mesh(mesh, color='tan')
-    >>> _ = pl.add_points(points, scalars='y', render_points_as_spheres=True, point_size=10.0)
-    >>> pl.show(cpos=cpos)
+    >>> _ = pl.add_points(
+    ...     points,
+    ...     scalars='y',
+    ...     render_points_as_spheres=True,
+    ...     point_size=10.0,
+    ...     scalar_bar_args={"vertical": True}
+    ... )
+    >>> pl.view_xy()
+    >>> pl.show()
     """
     points = random_line_points(mesh, n, weights)
     return pv.PolyData(points).sample(mesh, locator="static_cell")
