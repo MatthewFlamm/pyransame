@@ -4,7 +4,7 @@ PYthon RAndom SAmpling for MEshes
 [Documentation](https://matthewflamm.github.io/pyransame/)
 
 Utilites for choosing random samples of points within cells of [PyVista](https://github.com/pyvista/pyvista) meshes.
-This package does _not_ choose random points that define the mesh itself, rather random points on the 2D surface or
+This package does _not_ choose random points that define the mesh itself, rather random points on the 1D line, 2D surface or
 in the 3D volume are sampled.
 
 ## Random sampling on a 2D surface
