@@ -193,6 +193,8 @@ API documentation
    random_surface_dataset
    random_volume_points
    random_volume_dataset
+   random_line_points
+   random_line_dataset
 
 Indices and tables
 ==================
