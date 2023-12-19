@@ -391,3 +391,35 @@ def _generate_points_in_polyhedron(cell: pv.Cell, n: int = 1) -> np.ndarray:
         )
 
     return out
+
+
+def _generate_points_in_line(points: np.ndarray, n: int = 1):
+    a, b = points
+    r = pyransame.rng.random(size=(1, n))
+    return a + (b - a) * np.atleast_2d(r).T
+
+
+def _generate_points_in_polyline(points: np.ndarray, n: int = 1):
+    nline = points.shape[0] - 1
+
+    lengths = np.empty(shape=nline, dtype=float)
+    for i in range(nline):
+        lengths[i] = _length_line(points[i : i + 2, :])
+
+    out = np.empty((n, 3))
+
+    p = lengths / lengths.sum()
+
+    chosen_cells, unique_counts, point_indices = _random_cells(nline, n, p)
+
+    for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
+        out[point_indices[i] : point_indices[i + 1], :] = _generate_points_in_line(
+            points[chosen_cell : chosen_cell + 2, :], n=count
+        )
+
+    return out
+
+
+def _length_line(points: np.ndarray):
+    a, b = points
+    return np.linalg.norm(a - b)
