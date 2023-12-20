@@ -132,7 +132,8 @@ is also available.
    >>> pl.add_mesh(mesh, color='tan')
    >>> pl.add_points(points, scalars="ssavelocity",
    ...               render_points_as_spheres=True,
-   ...               point_size=10.0)
+   ...               point_size=10.0,
+   ...               clim=[0, 750])
    >>> pl.view_xy()
    >>> pl.show()
 
