@@ -45,7 +45,6 @@ pyvista.global_theme.font.size = 22
 pyvista.global_theme.font.label_size = 22
 pyvista.global_theme.font.title_size = 22
 pyvista.global_theme.return_cpos = False
-pyvista.global_theme.show_edges = True
 
 numpydoc_validation_checks = {
     "all",
