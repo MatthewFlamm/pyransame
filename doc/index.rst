@@ -183,19 +183,6 @@ Using ``pyransame`` makes the solution easier and handles more complex scenarios
    ...               point_size=10.0)
    >>> pl.show(cpos=cpos)
 
-API documentation
------------------
-.. currentmodule:: pyransame
-
-.. autosummary::
-   :toctree: _stubs
-
-   random_surface_points
-   random_surface_dataset
-   random_volume_points
-   random_volume_dataset
-   random_line_points
-   random_line_dataset
 
 Indices and tables
 ==================
@@ -203,3 +190,9 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+.. toctree::
+   :hidden:
+
+   api

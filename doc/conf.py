@@ -18,6 +18,8 @@ extensions = [
     "numpydoc",
     "sphinx.ext.autosummary",
     "pyvista.ext.plot_directive",
+    "pyvista.ext.viewer_directive",
+    "sphinx_design",
 ]
 
 templates_path = ["_templates"]
