@@ -1,4 +1,4 @@
-jupyterlab==4.0.9
+jupyterlab==4.0.10
 numpydoc==1.6.0
 pydata-sphinx-theme==0.14.4
 pyvista==0.43.1
