@@ -5,5 +5,5 @@ pyvista==0.43.1
 sphinx==7.2.6
 sphinx-design==0.5.0
 trame==3.4.0
-trame-vtk==2.6.2
+trame-vtk==2.6.3
 trame-vuetify==2.3.1
