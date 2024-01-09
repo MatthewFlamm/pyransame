@@ -5,7 +5,7 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
+import os
 
 project = "pyransame"
 copyright = "2023, Matthew Flamm"
@@ -15,11 +15,13 @@ author = "Matthew Flamm"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "jupyter_sphinx",
     "numpydoc",
     "sphinx.ext.autosummary",
     "pyvista.ext.plot_directive",
     "pyvista.ext.viewer_directive",
     "sphinx_design",
+    "sphinx_gallery.gen_gallery",
 ]
 
 templates_path = ["_templates"]
@@ -97,3 +99,23 @@ def _str_examples(self):
 
 
 SphinxDocString._str_examples = _str_examples
+
+# necessary when building the sphinx gallery
+pyvista.BUILDING_GALLERY = True
+os.environ["PYVISTA_BUILDING_GALLERY"] = "true"
+from pyvista.plotting.utilities.sphinx_gallery import DynamicScraper
+from sphinx_gallery.sorting import FileNameSortKey
+
+sphinx_gallery_conf = {
+    # path to your examples scripts
+    "examples_dirs": ["../examples_src/"],
+    # path where to save gallery generated examples
+    "gallery_dirs": ["examples"],
+    # Remove the "Download all examples" button from the top level gallery
+    "download_all_examples": False,
+    # Remove sphinx configuration comments from code blocks
+    "remove_config_comments": True,
+    # Sort gallery example by file name instead of number of lines (default)
+    "within_subsection_order": FileNameSortKey,
+    "image_scrapers": (DynamicScraper()),
+}
