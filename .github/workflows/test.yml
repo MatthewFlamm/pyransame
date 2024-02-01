@@ -47,7 +47,7 @@ jobs:
       run: |
         pytest tests --cov=src/pyransame --durations=10
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
   type-check:
     runs-on: ubuntu-latest
     steps:
