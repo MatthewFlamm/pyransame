@@ -1,4 +1,5 @@
 """Tests control and seeding of RNG."""
+
 import numpy as np
 import pyvista as pv
 from numpy.random import Generator, default_rng

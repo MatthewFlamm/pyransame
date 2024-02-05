@@ -1,4 +1,5 @@
 """Generating random points on a 2D surface."""
+
 from typing import Optional, Union
 
 import numpy as np
@@ -88,13 +89,13 @@ def random_line_points(
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         c = mesh.get_cell(chosen_cell)
         if c.type == pv.CellType.LINE:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_line(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_line(c.points, count)
+            )
         elif c.type == pv.CellType.POLY_LINE:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_polyline(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_polyline(c.points, count)
+            )
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"

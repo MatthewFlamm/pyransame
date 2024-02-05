@@ -1,4 +1,5 @@
 """Python package for random sampling of meshes."""
+
 from numpy.random import default_rng
 
 rng = default_rng()

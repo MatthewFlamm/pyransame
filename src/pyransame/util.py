@@ -152,11 +152,7 @@ def _area_tetra(points: np.ndarray) -> float:
 
     return (
         np.sqrt(
-            4 * a**2 * b**2 * c**2
-            - a**2 * X**2
-            - b**2 * Y**2
-            - c**2 * Z**2
-            + X * Y * Z
+            4 * a**2 * b**2 * c**2 - a**2 * X**2 - b**2 * Y**2 - c**2 * Z**2 + X * Y * Z
         )
         / 12.0
     )
@@ -258,9 +254,9 @@ def _generate_points_in_wedge(points: np.ndarray, n: int = 1) -> np.ndarray:
                 points[tetra, :], n=count
             )
         else:
-            out[
-                point_indices[i] : point_indices[i + 1], :
-            ] = _generate_points_in_pyramid(points[pyramid, :], n=count)
+            out[point_indices[i] : point_indices[i + 1], :] = (
+                _generate_points_in_pyramid(points[pyramid, :], n=count)
+            )
 
     return out
 
@@ -319,9 +315,9 @@ def _generate_points_in_pentagonal_prism(points: np.ndarray, n: int = 1) -> np.n
                 points[wedge, :], n=count
             )
         else:
-            out[
-                point_indices[i] : point_indices[i + 1], :
-            ] = _generate_points_in_hexahedron(points[hexahedron, :], n=count)
+            out[point_indices[i] : point_indices[i + 1], :] = (
+                _generate_points_in_hexahedron(points[hexahedron, :], n=count)
+            )
 
     return out
 
@@ -344,13 +340,13 @@ def _generate_points_in_hexagonal_prism(points: np.ndarray, n: int = 1) -> np.nd
 
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         if chosen_cell == 0:
-            out[
-                point_indices[i] : point_indices[i + 1], :
-            ] = _generate_points_in_hexahedron(points[hexahedron0, :], n=count)
+            out[point_indices[i] : point_indices[i + 1], :] = (
+                _generate_points_in_hexahedron(points[hexahedron0, :], n=count)
+            )
         else:
-            out[
-                point_indices[i] : point_indices[i + 1], :
-            ] = _generate_points_in_hexahedron(points[hexahedron1, :], n=count)
+            out[point_indices[i] : point_indices[i + 1], :] = (
+                _generate_points_in_hexahedron(points[hexahedron1, :], n=count)
+            )
 
     return out
 

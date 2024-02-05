@@ -1,4 +1,5 @@
 """Tests for random_surface_points."""
+
 import numpy as np
 import pytest
 import pyvista as pv

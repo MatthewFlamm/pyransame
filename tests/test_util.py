@@ -1,4 +1,5 @@
 """Test utilities."""
+
 from datetime import timedelta
 
 import numpy as np
@@ -128,10 +129,7 @@ def test_uniformity_quad():
     l_side_acd = np.sqrt(0.75**2 + 0.25**2)
     l_base_acd = np.sqrt(2.0)
     area_acd = (
-        1.0
-        / 2.0
-        * l_base_acd**2
-        * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
+        1.0 / 2.0 * l_base_acd**2 * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
     )
 
     center_abc = b + 2 / 3 * np.array([-0.5, 0.5, 0.0])
@@ -156,10 +154,7 @@ def test_uniformity_polygon():
     l_side_acd = np.sqrt(0.75**2 + 0.25**2)
     l_base_acd = np.sqrt(2.0)
     area_acd = (
-        1.0
-        / 2.0
-        * l_base_acd**2
-        * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
+        1.0 / 2.0 * l_base_acd**2 * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
     )
 
     center_abc = b + 2 / 3 * np.array([-0.5, 0.5, 0.0])
@@ -183,10 +178,7 @@ def test_uniformity_tri_strip():
     l_side_acd = np.sqrt(0.75**2 + 0.25**2)
     l_base_acd = np.sqrt(2.0)
     area_acd = (
-        1.0
-        / 2.0
-        * l_base_acd**2
-        * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
+        1.0 / 2.0 * l_base_acd**2 * np.sqrt(l_side_acd**2 / l_base_acd**2 - 1.0 / 4.0)
     )
 
     center_abc = b + 2 / 3 * np.array([-0.5, 0.5, 0.0])
