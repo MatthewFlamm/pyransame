@@ -7,6 +7,25 @@ version: 2
 updates:
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/" # Location of package manifests
+    groups:
+      test:
+        patterns:
+          - "pytest*"
+          - "hypothesis"
+      static:
+        patterns:
+          - "mypy"
+      docs:
+        patterns:
+          numpydoc
+          pydata-sphinx-theme
+          sphinx*
+
+      docs-dynamic:
+        patterns:
+          trame*
+          jupyter*
+
     schedule:
       interval: "monthly"
   - package-ecosystem: "github-actions"
