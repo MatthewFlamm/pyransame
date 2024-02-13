@@ -17,14 +17,14 @@ updates:
           - "mypy"
       docs:
         patterns:
-          numpydoc
-          pydata-sphinx-theme
-          sphinx*
+          - "numpydoc"
+          - "pydata-sphinx-theme"
+          - "sphinx*"
 
       docs-dynamic:
         patterns:
-          trame*
-          jupyter*
+          - "trame*"
+          - "jupyter*"
 
     schedule:
       interval: "monthly"
