@@ -48,6 +48,8 @@ jobs:
         pytest tests --cov=src/pyransame --durations=10
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   type-check:
     runs-on: ubuntu-latest
     steps:
