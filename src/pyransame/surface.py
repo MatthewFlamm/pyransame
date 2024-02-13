@@ -1,4 +1,5 @@
 """Generating random points on a 2D surface."""
+
 from typing import Optional, Union
 
 import numpy as np
@@ -93,25 +94,25 @@ def random_surface_points(
     for i, (chosen_cell, count) in enumerate(zip(chosen_cells, unique_counts)):
         c = mesh.get_cell(chosen_cell)
         if c.type == pv.CellType.TRIANGLE:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_tri(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_tri(c.points, count)
+            )
         elif c.type == pv.CellType.PIXEL:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_pixel(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_pixel(c.points, count)
+            )
         elif c.type == pv.CellType.QUAD:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_quad(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_quad(c.points, count)
+            )
         elif c.type == pv.CellType.POLYGON:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_polygon(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_polygon(c.points, count)
+            )
         elif c.type == pv.CellType.TRIANGLE_STRIP:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_tri_strip(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_tri_strip(c.points, count)
+            )
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"

@@ -1,4 +1,5 @@
 """Generating random points in a 3D volume."""
+
 from typing import Optional, Union
 
 import numpy as np
@@ -93,37 +94,37 @@ def random_volume_points(
         c = mesh.get_cell(chosen_cell)
 
         if c.type == CellType.TETRA:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_tetra(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_tetra(c.points, count)
+            )
         elif c.type == CellType.VOXEL:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_voxel(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_voxel(c.points, count)
+            )
         elif c.type == CellType.PYRAMID:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_pyramid(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_pyramid(c.points, count)
+            )
         elif c.type == CellType.WEDGE:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_wedge(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_wedge(c.points, count)
+            )
         elif c.type == CellType.HEXAHEDRON:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_hexahedron(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_hexahedron(c.points, count)
+            )
         elif c.type == CellType.PENTAGONAL_PRISM:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_pentagonal_prism(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_pentagonal_prism(c.points, count)
+            )
         elif c.type == CellType.HEXAGONAL_PRISM:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_hexagonal_prism(c.points, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_hexagonal_prism(c.points, count)
+            )
         elif c.type == CellType.POLYHEDRON:
-            points[
-                point_indices[i] : point_indices[i + 1], :
-            ] = util._generate_points_in_polyhedron(c, count)
+            points[point_indices[i] : point_indices[i + 1], :] = (
+                util._generate_points_in_polyhedron(c, count)
+            )
         else:
             raise NotImplementedError(
                 f"Random generation for {c.type.name} not yet supported"
