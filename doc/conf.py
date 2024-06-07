@@ -6,6 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
+import sys
 
 project = "pyransame"
 copyright = "2023, Matthew Flamm"
@@ -103,8 +104,10 @@ SphinxDocString._str_examples = _str_examples
 # necessary when building the sphinx gallery
 pyvista.BUILDING_GALLERY = True
 os.environ["PYVISTA_BUILDING_GALLERY"] = "true"
-from pyvista.plotting.utilities.sphinx_gallery import DynamicScraper
-from sphinx_gallery.sorting import FileNameSortKey
+
+sys.path.insert(0, os.path.dirname(__file__))
+
+# print(sys.path)
 
 sphinx_gallery_conf = {
     # path to your examples scripts
@@ -116,6 +119,6 @@ sphinx_gallery_conf = {
     # Remove sphinx configuration comments from code blocks
     "remove_config_comments": True,
     # Sort gallery example by file name instead of number of lines (default)
-    "within_subsection_order": FileNameSortKey,
-    "image_scrapers": (DynamicScraper()),
+    "within_subsection_order": "FileNameSortKey",
+    "image_scrapers": "sphinxext.dynamic_scraper",
 }
