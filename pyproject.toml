@@ -7,7 +7,7 @@ dynamic = ["version"]
 name = "pyransame"
 requires-python = ">=3.8"
 dependencies = [
-    "pyvista>=0.42",
+    "pyvista>=0.44",
     "numpy",
 ]
 description = "PYthon RAndom SAmpling for MEshes"

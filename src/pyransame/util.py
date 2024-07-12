@@ -419,3 +419,11 @@ def _generate_points_in_polyline(points: np.ndarray, n: int = 1):
 def _length_line(points: np.ndarray):
     a, b = points
     return np.linalg.norm(a - b)
+
+
+def _generate_points_in_vertex(points: np.ndarray, n: int = 1):
+    return np.repeat(points, n, 0)
+
+
+def _generate_points_in_polyvertex(points: np.ndarray, n: int = 1):
+    return pyransame.rng.choice(points, n)
