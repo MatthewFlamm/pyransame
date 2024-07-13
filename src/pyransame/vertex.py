@@ -84,7 +84,7 @@ def random_vertex_points(
 
     n_cells = mesh.n_cells
 
-    if "Length" not in mesh.cell_data:
+    if "VertexCount" not in mesh.cell_data:
         mesh = mesh.compute_cell_sizes(length=False, area=False, volume=False, vertex_count=True)  # type: ignore
 
     p = weights * mesh["VertexCount"]
