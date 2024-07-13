@@ -74,7 +74,7 @@ def test_small_sample(vertex):
 
 
 def test_nonuniform_cell_size(nonuniform_vertex):
-    points = pyransame.random_vertex_points(nonuniform_vertex, 200000)
+    points = pyransame.random_vertex_points(nonuniform_vertex, 1000000)
     assert np.allclose(points.mean(axis=0), (-1 / 3, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
 
@@ -83,14 +83,14 @@ def test_nonuniform_cell_size_w_precomputed_areas(nonuniform_vertex):
         length=False, volume=False, area=False, vertex_count=True
     )
 
-    points = pyransame.random_vertex_points(mesh, 200000)
+    points = pyransame.random_vertex_points(mesh, 1000000)
     assert np.allclose(points.mean(axis=0), (-1 / 3, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
 
 def test_weights(nonuniform_vertex):
     nonuniform_vertex.cell_data["weights"] = [1, 1, 2]
 
-    points = pyransame.random_vertex_points(nonuniform_vertex, 200000, "weights")
+    points = pyransame.random_vertex_points(nonuniform_vertex, 1000000, "weights")
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
     nonuniform_vertex.cell_data.clear()
@@ -100,7 +100,7 @@ def test_weights(nonuniform_vertex):
 
 
 def test_weights_array(nonuniform_vertex):
-    points = pyransame.random_vertex_points(nonuniform_vertex, 200000, [1, 1, 2])
+    points = pyransame.random_vertex_points(nonuniform_vertex, 1000000, [1, 1, 2])
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
 
