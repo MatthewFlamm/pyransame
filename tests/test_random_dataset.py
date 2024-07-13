@@ -1,6 +1,7 @@
 """Tests for random_*_dataset."""
 
 import numpy as np
+import pytest
 import pyvista as pv
 
 import pyransame
@@ -42,6 +43,9 @@ def test_random_line_dataset():
     assert np.allclose(sampled.points[:, 2], sampled["z"])
 
 
+@pytest.mark.skipif(
+    pv.vtk_version_info < (9, 3), reason="requires vtk ve4sion 9.3 or higher"
+)
 def test_random_vertex_dataset():
     mesh = pv.ImageData(dimensions=(10, 10, 10))
     mesh = pv.PolyData(mesh.points)  # make all vertex cells
