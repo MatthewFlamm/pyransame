@@ -16,8 +16,9 @@ def vertex():
 
 @pytest.fixture
 def nonuniform_vertex():
+    """One vertex, one poly vertex."""
     points = np.array([[-2.0, 0.0, 0.0], [0.0, 0.0, 0.0], [1.0, 0.0, 0]])
-    return pv.PolyData(points, verts=[1, 0, 1, 1, 1, 2])
+    return pv.PolyData(points, verts=[1, 0, 2, 1, 2])
 
 
 @pytest.fixture
@@ -88,19 +89,19 @@ def test_nonuniform_cell_size_w_precomputed_areas(nonuniform_vertex):
 
 
 def test_weights(nonuniform_vertex):
-    nonuniform_vertex.cell_data["weights"] = [1, 1, 2]
+    nonuniform_vertex.cell_data["weights"] = [1, 2]
 
     points = pyransame.random_vertex_points(nonuniform_vertex, 1000000, "weights")
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
     nonuniform_vertex.cell_data.clear()
-    nonuniform_vertex.cell_data["other_str"] = [1, 1, 2]
+    nonuniform_vertex.cell_data["other_str"] = [1, 2]
 
     points = pyransame.random_vertex_points(nonuniform_vertex, 200, "other_str")
 
 
 def test_weights_array(nonuniform_vertex):
-    points = pyransame.random_vertex_points(nonuniform_vertex, 1000000, [1, 1, 2])
+    points = pyransame.random_vertex_points(nonuniform_vertex, 1000000, [1, 2])
     assert np.allclose(points.mean(axis=0), (0.0, 0.0, 0.0), rtol=5e-3, atol=5e-3)
 
 
