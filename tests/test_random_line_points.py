@@ -86,7 +86,7 @@ def test_nonuniform_cell_size(nonuniform_line):
 
 
 def test_nonuniform_cell_size_w_precomputed_areas(nonuniform_line):
-    mesh = nonuniform_line.compute_cell_sizes(length=False, volume=False)
+    mesh = nonuniform_line.compute_cell_sizes(length=True, area=False, volume=False)
 
     points = pyransame.random_line_points(mesh, 200000)
     assert np.allclose(points.mean(axis=0), (-0.5, 0.0, 0.0), rtol=5e-3, atol=5e-3)
@@ -117,9 +117,9 @@ def test_wrong_weights(line):
     weights = {"not a good entry": "should raise an error"}
 
     with pytest.raises(TypeError):
-        pyransame.random_surface_points(line, 20, weights=weights)
+        pyransame.random_line_points(line, 20, weights=weights)
 
 
 def test_wrong_n(line):
     with pytest.raises(ValueError, match="n must be > 0, got -20"):
-        pyransame.random_surface_points(line, -20)
+        pyransame.random_line_points(line, -20)

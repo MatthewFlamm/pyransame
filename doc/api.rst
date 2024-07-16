@@ -12,3 +12,5 @@ API Documentation
    random_volume_dataset
    random_line_points
    random_line_dataset
+   random_vertex_points
+   random_vertex_dataset

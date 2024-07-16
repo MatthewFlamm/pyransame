@@ -19,11 +19,13 @@ from pyransame.util import (
     _generate_points_in_polygon,
     _generate_points_in_polyhedron,
     _generate_points_in_polyline,
+    _generate_points_in_polyvertex,
     _generate_points_in_pyramid,
     _generate_points_in_quad,
     _generate_points_in_tetra,
     _generate_points_in_tri,
     _generate_points_in_tri_strip,
+    _generate_points_in_vertex,
     _generate_points_in_voxel,
     _generate_points_in_wedge,
 )
@@ -340,3 +342,20 @@ def test_uniformity_polyline():
     points = _generate_points_in_polyline(polyline.points, 1000000)
 
     assert np.allclose(points.mean(axis=0), [0.75, 0.25, 0.0], rtol=1e-3, atol=1e-3)
+
+
+def test_uniformity_vertex():
+    vertices = [[0.0, 0.0, 0.0]]
+
+    points = _generate_points_in_vertex(vertices, 10000)
+
+    # all points are (0, 0, 0)
+    assert np.allclose(points, [0.0, 0.0, 0.0])
+
+
+def test_uniformity_poly_vertex():
+    vertices = [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
+
+    points = _generate_points_in_polyvertex(vertices, 1000000)
+
+    assert np.allclose(points.mean(axis=0), [0.5, 0.0, 0.0], rtol=1e-3, atol=1e-3)
