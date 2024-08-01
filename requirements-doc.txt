@@ -3,9 +3,9 @@ jupyterlab==4.2.4
 numpydoc==1.7.0
 pydata-sphinx-theme==0.15.4
 pyvista==0.44.1
-sphinx==7.3.7
+sphinx==8.0.2
 sphinx-design==0.6.0
-sphinx-gallery==0.16.0
+sphinx-gallery==0.17.0
 trame==3.6.3
 trame-vtk==2.8.9
 trame-vuetify==2.6.2
