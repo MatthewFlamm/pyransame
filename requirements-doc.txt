@@ -7,5 +7,5 @@ sphinx==8.0.2
 sphinx-design==0.6.1
 sphinx-gallery==0.17.1
 trame==3.6.3
-trame-vtk==2.8.9
-trame-vuetify==2.6.2
+trame-vtk==2.8.10
+trame-vuetify==2.7.0
