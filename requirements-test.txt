@@ -1,5 +1,5 @@
 pytest==8.4.1
 pytest-cov==6.2.1
-hypothesis==6.135.20
+hypothesis==6.136.6
 mypy==1.16.1
 pyvista==0.45.2
