@@ -30,7 +30,7 @@ jobs:
       - name: Build documentation
         run: make -C doc html
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: doc
           path: doc/_build/html
