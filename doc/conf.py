@@ -54,6 +54,18 @@ numpydoc_validation_checks = {
     "SA01",  # do not require see also
 }
 
+# Skip validation of the accessor wrapper methods — they are thin
+# forwarders whose parameters and return values are documented on the
+# top-level ``random_*`` functions they call.
+numpydoc_validation_exclude = {
+    r"pyransame\.accessor\.RansameAccessor.*",
+}
+
+# Don't emit a separate toctree entry for each class member — autoclass
+# already documents methods inline, so the implicit ``_stubs`` lookups
+# numpydoc would generate point at non-existent stub files.
+numpydoc_class_members_toctree = False
+
 import re
 
 # from pyvista

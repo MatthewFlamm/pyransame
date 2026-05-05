@@ -55,10 +55,12 @@ _DIM_TO_KIND: dict[int, Kind] = {
 
 
 class RansameAccessor:
-    """Accessor exposing :mod:`pyransame` sampling routines on a dataset.
+    """
+    Accessor exposing :mod:`pyransame` sampling routines on a dataset.
 
     Available as ``dataset.ransam`` once :mod:`pyransame` is imported on
-    PyVista >= 0.48.
+    PyVista >= 0.48. Each method forwards to the corresponding
+    top-level ``random_*`` function in :mod:`pyransame`.
     """
 
     def __init__(self, mesh: pv.DataSet) -> None:
@@ -69,7 +71,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> np.ndarray:
-        """Random points on 2D surface cells. See :func:`pyransame.random_surface_points`."""
+        """
+        Random points on 2D surface cells.
+
+        Forwards to :func:`pyransame.random_surface_points`. See that
+        function for the full parameter description and supported cell
+        types.
+        """
         return random_surface_points(self._mesh, n=n, weights=weights)
 
     def surface_dataset(
@@ -77,7 +85,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> pv.PolyData:
-        """Random sampled :class:`pyvista.PolyData` on surface cells. See :func:`pyransame.random_surface_dataset`."""
+        """
+        Random sampled :class:`pyvista.PolyData` on surface cells.
+
+        Forwards to :func:`pyransame.random_surface_dataset`, which
+        returns a :class:`pyvista.PolyData` with point data interpolated
+        from the input mesh.
+        """
         return random_surface_dataset(self._mesh, n=n, weights=weights)
 
     def volume_points(
@@ -85,7 +99,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> np.ndarray:
-        """Random points in 3D volume cells. See :func:`pyransame.random_volume_points`."""
+        """
+        Random points in 3D volume cells.
+
+        Forwards to :func:`pyransame.random_volume_points`. See that
+        function for the full parameter description and supported cell
+        types.
+        """
         return random_volume_points(self._mesh, n=n, weights=weights)
 
     def volume_dataset(
@@ -93,7 +113,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> pv.PolyData:
-        """Random sampled :class:`pyvista.PolyData` in volume cells. See :func:`pyransame.random_volume_dataset`."""
+        """
+        Random sampled :class:`pyvista.PolyData` in volume cells.
+
+        Forwards to :func:`pyransame.random_volume_dataset`, which
+        returns a :class:`pyvista.PolyData` with point data interpolated
+        from the input mesh.
+        """
         return random_volume_dataset(self._mesh, n=n, weights=weights)
 
     def line_points(
@@ -101,7 +127,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> np.ndarray:
-        """Random points on 1D line cells. See :func:`pyransame.random_line_points`."""
+        """
+        Random points on 1D line cells.
+
+        Forwards to :func:`pyransame.random_line_points`. See that
+        function for the full parameter description and supported cell
+        types.
+        """
         return random_line_points(self._mesh, n=n, weights=weights)
 
     def line_dataset(
@@ -109,7 +141,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> pv.PolyData:
-        """Random sampled :class:`pyvista.PolyData` on line cells. See :func:`pyransame.random_line_dataset`."""
+        """
+        Random sampled :class:`pyvista.PolyData` on line cells.
+
+        Forwards to :func:`pyransame.random_line_dataset`, which returns
+        a :class:`pyvista.PolyData` with point data interpolated from
+        the input mesh.
+        """
         return random_line_dataset(self._mesh, n=n, weights=weights)
 
     def vertex_points(
@@ -117,7 +155,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> np.ndarray:
-        """Random points sampled from 0D vertex cells. See :func:`pyransame.random_vertex_points`."""
+        """
+        Random points sampled from 0D vertex cells.
+
+        Forwards to :func:`pyransame.random_vertex_points`. See that
+        function for the full parameter description and supported cell
+        types.
+        """
         return random_vertex_points(self._mesh, n=n, weights=weights)
 
     def vertex_dataset(
@@ -125,7 +169,13 @@ class RansameAccessor:
         n: int = 1,
         weights: Optional[Union[str, npt.ArrayLike]] = None,
     ) -> pv.PolyData:
-        """Random sampled :class:`pyvista.PolyData` from vertex cells. See :func:`pyransame.random_vertex_dataset`."""
+        """
+        Random sampled :class:`pyvista.PolyData` from vertex cells.
+
+        Forwards to :func:`pyransame.random_vertex_dataset`, which
+        returns a :class:`pyvista.PolyData` with point data interpolated
+        from the input mesh.
+        """
         return random_vertex_dataset(self._mesh, n=n, weights=weights)
 
     def _infer_kind(self) -> Kind:
@@ -155,7 +205,12 @@ class RansameAccessor:
         *,
         kind: Optional[Kind] = None,
     ) -> np.ndarray:
-        """Random points, dispatched by cell dimension.
+        """
+        Random points, dispatched by cell dimension.
+
+        Inspects the mesh's distinct cell types and forwards to the
+        matching ``random_*_points`` function. Pass ``kind`` explicitly
+        to override the inferred dimension on mixed-dimension meshes.
 
         Parameters
         ----------
@@ -195,7 +250,12 @@ class RansameAccessor:
         *,
         kind: Optional[Kind] = None,
     ) -> pv.PolyData:
-        """Random sampled :class:`pyvista.PolyData`, dispatched by cell dimension.
+        """
+        Random sampled :class:`pyvista.PolyData`, dispatched by cell dimension.
+
+        Inspects the mesh's distinct cell types and forwards to the
+        matching ``random_*_dataset`` function. Pass ``kind`` explicitly
+        to override the inferred dimension on mixed-dimension meshes.
 
         Parameters
         ----------

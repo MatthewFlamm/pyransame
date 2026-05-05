@@ -39,7 +39,7 @@ mesh["age"] = mesh.points[:, 1]
 # Sample the points with respect to the volume fraction to obtain a realistic
 # particle distribution in the domain.
 
-points = pyransame.random_volume_dataset(mesh, 1000, weights="volume_frac")
+points = mesh.ransam.volume_dataset(1000, weights="volume_frac")
 
 ###############################################################################
 # In this example, we also know the particles diameters come from a normal

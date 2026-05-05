@@ -18,7 +18,7 @@ PYthon RAndom SAmpling for MEshes (pyransame) chooses random samples of points w
 
    Sample points on mesh using ``pyransame``.
 
-   >>> points = pyransame.random_surface_dataset(antarctica, 500)
+   >>> points = antarctica.ransam.surface_dataset(500)
 
    Plot points on mesh.
 

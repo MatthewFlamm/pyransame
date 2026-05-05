@@ -33,7 +33,7 @@ weights = (ymax - antarctica.cell_centers().points[:, 1]) ** 2
 ###############################################################################
 # Do weighted sampling.
 
-points = pyransame.random_surface_dataset(antarctica, 500, weights=weights)
+points = antarctica.ransam.surface_dataset(500, weights=weights)
 
 ###############################################################################
 # Now plot result.
@@ -49,7 +49,7 @@ pl.show()
 # The same thing can be done with cell data on the mesh.
 
 antarctica.cell_data["weights"] = weights
-points = pyransame.random_surface_dataset(antarctica, 500, weights="weights")
+points = antarctica.ransam.surface_dataset(500, weights="weights")
 
 ###############################################################################
 # Now plot result. The result will be slightly different due to random nature
