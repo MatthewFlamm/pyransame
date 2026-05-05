@@ -25,24 +25,6 @@ from pyransame.surface import random_surface_dataset, random_surface_points
 from pyransame.vertex import random_vertex_dataset, random_vertex_points
 from pyransame.volume import random_volume_dataset, random_volume_points
 
-# vtkCellTypes.GetDimension was deprecated in VTK 9.6 in favor of
-# vtkCellTypeUtilities.GetDimension. Try the new home first and fall
-# back to the legacy class on older VTK builds.
-try:
-    from vtkmodules.vtkCommonDataModel import (  # type: ignore[attr-defined]
-        vtkCellTypeUtilities,
-    )
-
-    def _cell_type_dimension(cell_type: int) -> int:
-        return vtkCellTypeUtilities.GetDimension(cell_type)
-
-except ImportError:  # pragma: no cover - exercised only on VTK < 9.6
-    from vtkmodules.vtkCommonDataModel import vtkCellTypes
-
-    def _cell_type_dimension(cell_type: int) -> int:
-        return vtkCellTypes.GetDimension(cell_type)
-
-
 ACCESSOR_NAME = "ransam"
 
 Kind = Literal["vertex", "line", "surface", "volume"]
@@ -180,23 +162,23 @@ class RansameAccessor:
 
     def _infer_kind(self) -> Kind:
         mesh = self._mesh
-        cell_types = mesh.distinct_cell_types
-        if not cell_types:
+        if mesh.n_cells == 0:
             msg = "Mesh has no cells; cannot infer sampling kind."
             raise ValueError(msg)
-        dims = {_cell_type_dimension(int(ct)) for ct in cell_types}
-        if len(dims) > 1:
+        lo = mesh.min_cell_dimensionality
+        hi = mesh.max_cell_dimensionality
+        if lo != hi:
+            dims = sorted({ct.dimension for ct in mesh.distinct_cell_types})
             kinds = sorted(_DIM_TO_KIND[d] for d in dims if d in _DIM_TO_KIND)
             msg = (
-                f"Mesh has cells of multiple dimensions ({sorted(dims)}, "
+                f"Mesh has cells of multiple dimensions ({dims}, "
                 f"kinds {kinds}); pass ``kind=`` to disambiguate."
             )
             raise ValueError(msg)
-        dim = dims.pop()
-        if dim not in _DIM_TO_KIND:
-            msg = f"Unsupported cell dimension {dim}; pass ``kind=`` explicitly."
+        if lo not in _DIM_TO_KIND:  # pragma: no cover - defensive guard
+            msg = f"Unsupported cell dimension {lo}; pass ``kind=`` explicitly."
             raise ValueError(msg)
-        return _DIM_TO_KIND[dim]
+        return _DIM_TO_KIND[lo]
 
     def points(
         self,
@@ -313,11 +295,11 @@ def _register() -> bool:
     re-import in tests).
     """
     register = getattr(pv, "register_dataset_accessor", None)
-    if register is None:
+    if register is None:  # pragma: no cover - exercised only on PyVista < 0.48
         return False
     try:
         register(ACCESSOR_NAME, pv.DataSet)(RansameAccessor)
-    except ValueError:
+    except ValueError:  # pragma: no cover - double-registration edge case
         # Already registered (e.g. plugin imported twice).
         return False
     return True
