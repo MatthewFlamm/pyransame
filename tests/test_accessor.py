@@ -76,6 +76,48 @@ def test_vertex_points_and_dataset():
     assert sampled.n_points == 10
 
 
+def test_dispatch_points_surface():
+    mesh = pv.Plane()
+    pts = mesh.ransam.points(20)
+    assert pts.shape == (20, 3)
+
+
+def test_dispatch_dataset_volume():
+    mesh = pv.ImageData(dimensions=(8, 8, 8))
+    sampled = mesh.ransam.dataset(15)
+    assert sampled.n_points == 15
+
+
+def test_dispatch_kind_override():
+    mesh = pv.Plane()
+    pts = mesh.ransam.points(10, kind="surface")
+    assert pts.shape == (10, 3)
+
+
+def test_dispatch_line_inferred():
+    mesh = pv.Line()
+    pts = mesh.ransam.points(7)
+    assert pts.shape == (7, 3)
+
+
+def test_dispatch_raises_on_mixed_dim():
+    # PolyData carrying both line and triangle cells.
+    plane = pv.Plane().triangulate()
+    line = pv.Line()
+    mixed = plane + line
+    with pytest.raises(ValueError, match="multiple dimensions"):
+        mixed.ransam.points(5)
+    # Override is honored.
+    pts = mixed.ransam.points(5, kind="surface")
+    assert pts.shape == (5, 3)
+
+
+def test_dispatch_raises_on_empty_mesh():
+    mesh = pv.PolyData()
+    with pytest.raises(ValueError, match="no cells"):
+        mesh.ransam.points(1)
+
+
 def test_accessor_available_on_subclasses():
     # Registering against ``DataSet`` should expose accessor on every
     # concrete subclass.

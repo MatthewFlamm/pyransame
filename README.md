@@ -40,6 +40,17 @@ The accessor mirrors the top-level functions:
 | `mesh.ransam.line_dataset(n)`   | `pyransame.random_line_dataset`      |
 | `mesh.ransam.vertex_points(n)`  | `pyransame.random_vertex_points`     |
 | `mesh.ransam.vertex_dataset(n)` | `pyransame.random_vertex_dataset`    |
+| `mesh.ransam.points(n)`         | dispatch by cell dimension           |
+| `mesh.ransam.dataset(n)`        | dispatch by cell dimension           |
+
+`points` and `dataset` infer the sampler from the cell dimensions on
+the mesh: vertex (0D), line (1D), surface (2D), or volume (3D). Mixed
+dimensions raise `ValueError`. Pass `kind="vertex" | "line" | "surface"
+| "volume"` to override:
+
+```python
+sampled = mixed_mesh.ransam.dataset(500, kind="surface")
+```
 
 On older PyVista releases the package still installs and imports
 cleanly; only the `mesh.ransam` namespace is unavailable. Use the

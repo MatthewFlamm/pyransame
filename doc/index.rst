@@ -60,7 +60,15 @@ Accessor method                   Equivalent function
 ``mesh.ransam.line_dataset``      :func:`pyransame.random_line_dataset`
 ``mesh.ransam.vertex_points``     :func:`pyransame.random_vertex_points`
 ``mesh.ransam.vertex_dataset``    :func:`pyransame.random_vertex_dataset`
+``mesh.ransam.points``            dispatch by cell dimension
+``mesh.ransam.dataset``           dispatch by cell dimension
 ================================  ==================================
+
+``points`` and ``dataset`` introspect ``mesh.distinct_cell_types`` to
+choose the sampler (vertex, line, surface, or volume). Meshes that
+carry cells of more than one dimension raise :class:`ValueError`; pass
+``kind="vertex" | "line" | "surface" | "volume"`` to force a specific
+sampler.
 
 On older PyVista releases the package still installs and imports
 cleanly; only the ``mesh.ransam`` namespace is unavailable, and the
