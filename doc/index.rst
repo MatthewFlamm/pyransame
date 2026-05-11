@@ -18,7 +18,7 @@ PYthon RAndom SAmpling for MEshes (pyransame) chooses random samples of points w
 
    Sample points on mesh using ``pyransame``.
 
-   >>> points = antarctica.ransam.surface_dataset(500)
+   >>> points = antarctica.ransame.surface_dataset(500)
 
    Plot points on mesh.
 
@@ -34,9 +34,9 @@ PyVista dataset accessor
 ========================
 
 On PyVista 0.48 and newer, ``pip install pyransame`` registers a
-``ransam`` accessor on every PyVista dataset. PyVista discovers it
+``ransame`` accessor on every PyVista dataset. PyVista discovers it
 through the ``pyvista.accessors`` entry point and imports the plugin
-lazily the first time ``mesh.ransam`` is used.
+lazily the first time ``mesh.ransame`` is used.
 
 .. code-block:: python
 
@@ -44,24 +44,24 @@ lazily the first time ``mesh.ransam`` is used.
     from pyvista import examples
 
     bunny = examples.download_bunny()
-    points = bunny.ransam.surface_points(500)
-    sampled = bunny.ransam.surface_dataset(500)
+    points = bunny.ransame.surface_points(500)
+    sampled = bunny.ransame.surface_dataset(500)
 
 The accessor exposes a method for each top-level sampling function:
 
 ================================  ==================================
 Accessor method                   Equivalent function
 ================================  ==================================
-``mesh.ransam.surface_points``    :func:`pyransame.random_surface_points`
-``mesh.ransam.surface_dataset``   :func:`pyransame.random_surface_dataset`
-``mesh.ransam.volume_points``     :func:`pyransame.random_volume_points`
-``mesh.ransam.volume_dataset``    :func:`pyransame.random_volume_dataset`
-``mesh.ransam.line_points``       :func:`pyransame.random_line_points`
-``mesh.ransam.line_dataset``      :func:`pyransame.random_line_dataset`
-``mesh.ransam.vertex_points``     :func:`pyransame.random_vertex_points`
-``mesh.ransam.vertex_dataset``    :func:`pyransame.random_vertex_dataset`
-``mesh.ransam.points``            dispatch by cell dimension
-``mesh.ransam.dataset``           dispatch by cell dimension
+``mesh.ransame.surface_points``    :func:`pyransame.random_surface_points`
+``mesh.ransame.surface_dataset``   :func:`pyransame.random_surface_dataset`
+``mesh.ransame.volume_points``     :func:`pyransame.random_volume_points`
+``mesh.ransame.volume_dataset``    :func:`pyransame.random_volume_dataset`
+``mesh.ransame.line_points``       :func:`pyransame.random_line_points`
+``mesh.ransame.line_dataset``      :func:`pyransame.random_line_dataset`
+``mesh.ransame.vertex_points``     :func:`pyransame.random_vertex_points`
+``mesh.ransame.vertex_dataset``    :func:`pyransame.random_vertex_dataset`
+``mesh.ransame.points``            dispatch by cell dimension
+``mesh.ransame.dataset``           dispatch by cell dimension
 ================================  ==================================
 
 ``points`` and ``dataset`` introspect ``mesh.distinct_cell_types`` to
@@ -71,7 +71,7 @@ carry cells of more than one dimension raise :class:`ValueError`; pass
 sampler.
 
 On older PyVista releases the package still installs and imports
-cleanly; only the ``mesh.ransam`` namespace is unavailable, and the
+cleanly; only the ``mesh.ransame`` namespace is unavailable, and the
 top-level ``pyransame.random_*`` functions should be used instead.
 
 For more usage see :ref:`examples`.

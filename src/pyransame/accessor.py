@@ -1,16 +1,16 @@
 """PyVista dataset accessor for ``pyransame``.
 
-Registers a ``ransam`` accessor on :class:`pyvista.DataSet` so the
+Registers a ``ransame`` accessor on :class:`pyvista.DataSet` so the
 sampling routines can be invoked as methods on any PyVista mesh::
 
     >>> import pyvista as pv
     >>> import pyransame  # noqa: F401  (ensures accessor is registered)
     >>> mesh = pv.Plane()
-    >>> points = mesh.ransam.surface_points(10)
+    >>> points = mesh.ransame.surface_points(10)
 
 Importing this module is a no-op on PyVista versions that predate the
 dataset accessor API (added in PyVista 0.48). The package therefore
-remains importable on older PyVista releases; the ``ransam`` namespace
+remains importable on older PyVista releases; the ``ransame`` namespace
 will not be attached to datasets.
 """
 
@@ -25,7 +25,7 @@ from pyransame.surface import random_surface_dataset, random_surface_points
 from pyransame.vertex import random_vertex_dataset, random_vertex_points
 from pyransame.volume import random_volume_dataset, random_volume_points
 
-ACCESSOR_NAME = "ransam"
+ACCESSOR_NAME = "ransame"
 
 Kind = Literal["vertex", "line", "surface", "volume"]
 _DIM_TO_KIND: dict[int, Kind] = {
@@ -40,7 +40,7 @@ class RansameAccessor:
     """
     Accessor exposing :mod:`pyransame` sampling routines on a dataset.
 
-    Available as ``dataset.ransam`` once :mod:`pyransame` is imported on
+    Available as ``dataset.ransame`` once :mod:`pyransame` is imported on
     PyVista >= 0.48. Each method forwards to the corresponding
     top-level ``random_*`` function in :mod:`pyransame`.
     """
@@ -216,9 +216,9 @@ class RansameAccessor:
 
         Examples
         --------
-        >>> import pyransame  # noqa: F401  (registers ``ransam``)
+        >>> import pyransame  # noqa: F401  (registers ``ransame``)
         >>> import pyvista as pv
-        >>> pts = pv.Plane().ransam.points(5)
+        >>> pts = pv.Plane().ransame.points(5)
         >>> pts.shape
         (5, 3)
         """
@@ -261,9 +261,9 @@ class RansameAccessor:
 
         Examples
         --------
-        >>> import pyransame  # noqa: F401  (registers ``ransam``)
+        >>> import pyransame  # noqa: F401  (registers ``ransame``)
         >>> import pyvista as pv
-        >>> sampled = pv.Plane().ransam.dataset(5)
+        >>> sampled = pv.Plane().ransame.dataset(5)
         >>> sampled.n_points
         5
         """

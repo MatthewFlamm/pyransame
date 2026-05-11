@@ -1,4 +1,4 @@
-"""Tests for the ``ransam`` PyVista dataset accessor."""
+"""Tests for the ``ransame`` PyVista dataset accessor."""
 
 import numpy as np
 import pytest
@@ -7,7 +7,7 @@ import pyvista as pv
 import pyransame
 from pyransame import RansameAccessor
 
-ACCESSOR_NAME = "ransam"
+ACCESSOR_NAME = "ransame"
 
 pytestmark = pytest.mark.skipif(
     not hasattr(pv, "register_dataset_accessor"),
@@ -18,17 +18,17 @@ pytestmark = pytest.mark.skipif(
 def test_accessor_registered():
     mesh = pv.Plane()
     assert hasattr(mesh, ACCESSOR_NAME)
-    assert isinstance(mesh.ransam, RansameAccessor)
+    assert isinstance(mesh.ransame, RansameAccessor)
 
 
 def test_accessor_cached_per_instance():
     mesh = pv.Plane()
-    assert mesh.ransam is mesh.ransam
+    assert mesh.ransame is mesh.ransame
 
 
 def test_surface_points():
     mesh = pv.Plane()
-    points = mesh.ransam.surface_points(25)
+    points = mesh.ransame.surface_points(25)
     assert points.shape == (25, 3)
 
 
@@ -37,7 +37,7 @@ def test_surface_dataset_matches_function():
     mesh["x"] = mesh.points[:, 0]
 
     pyransame.rng = np.random.default_rng(0)
-    sampled_method = mesh.ransam.surface_dataset(50)
+    sampled_method = mesh.ransame.surface_dataset(50)
 
     pyransame.rng = np.random.default_rng(0)
     sampled_func = pyransame.random_surface_dataset(mesh, 50)
@@ -48,19 +48,19 @@ def test_surface_dataset_matches_function():
 
 def test_volume_points_and_dataset():
     mesh = pv.ImageData(dimensions=(10, 10, 10))
-    points = mesh.ransam.volume_points(20)
+    points = mesh.ransame.volume_points(20)
     assert points.shape == (20, 3)
 
-    sampled = mesh.ransam.volume_dataset(20)
+    sampled = mesh.ransame.volume_dataset(20)
     assert sampled.n_points == 20
 
 
 def test_line_points_and_dataset():
     mesh = pv.Line()
-    points = mesh.ransam.line_points(15)
+    points = mesh.ransame.line_points(15)
     assert points.shape == (15, 3)
 
-    sampled = mesh.ransam.line_dataset(15)
+    sampled = mesh.ransame.line_dataset(15)
     assert sampled.n_points == 15
 
 
@@ -69,34 +69,34 @@ def test_line_points_and_dataset():
 )
 def test_vertex_points_and_dataset():
     mesh = pv.PolyData(pv.ImageData(dimensions=(5, 5, 5)).points)
-    points = mesh.ransam.vertex_points(10)
+    points = mesh.ransame.vertex_points(10)
     assert points.shape == (10, 3)
 
-    sampled = mesh.ransam.vertex_dataset(10)
+    sampled = mesh.ransame.vertex_dataset(10)
     assert sampled.n_points == 10
 
 
 def test_dispatch_points_surface():
     mesh = pv.Plane()
-    pts = mesh.ransam.points(20)
+    pts = mesh.ransame.points(20)
     assert pts.shape == (20, 3)
 
 
 def test_dispatch_dataset_volume():
     mesh = pv.ImageData(dimensions=(8, 8, 8))
-    sampled = mesh.ransam.dataset(15)
+    sampled = mesh.ransame.dataset(15)
     assert sampled.n_points == 15
 
 
 def test_dispatch_kind_override():
     mesh = pv.Plane()
-    pts = mesh.ransam.points(10, kind="surface")
+    pts = mesh.ransame.points(10, kind="surface")
     assert pts.shape == (10, 3)
 
 
 def test_dispatch_line_inferred():
     mesh = pv.Line()
-    pts = mesh.ransam.points(7)
+    pts = mesh.ransame.points(7)
     assert pts.shape == (7, 3)
 
 
@@ -106,16 +106,16 @@ def test_dispatch_raises_on_mixed_dim():
     line = pv.Line()
     mixed = plane + line
     with pytest.raises(ValueError, match="multiple dimensions"):
-        mixed.ransam.points(5)
+        mixed.ransame.points(5)
     # Override is honored.
-    pts = mixed.ransam.points(5, kind="surface")
+    pts = mixed.ransame.points(5, kind="surface")
     assert pts.shape == (5, 3)
 
 
 def test_dispatch_raises_on_empty_mesh():
     mesh = pv.PolyData()
     with pytest.raises(ValueError, match="no cells"):
-        mesh.ransam.points(1)
+        mesh.ransame.points(1)
 
 
 def test_accessor_available_on_subclasses():
@@ -126,4 +126,4 @@ def test_accessor_available_on_subclasses():
         pv.ImageData(dimensions=(4, 4, 4)),
         pv.Line(),
     ):
-        assert isinstance(mesh.ransam, RansameAccessor)
+        assert isinstance(mesh.ransame, RansameAccessor)

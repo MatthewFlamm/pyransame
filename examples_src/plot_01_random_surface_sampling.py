@@ -25,11 +25,11 @@ antarctica.points /= 1000.0  # convert to kilometers
 ###############################################################################
 # sample 500 points uniformly randomly.
 
-points = antarctica.ransam.surface_dataset(500)
+points = antarctica.ransame.surface_dataset(500)
 points
 
 ###############################################################################
-# The ``ransam`` accessor on the dataset (registered by ``pyransame``)
+# The ``ransame`` accessor on the dataset (registered by ``pyransame``)
 # forwards to :func:`pyransame.random_surface_dataset`, which returns a
 # `pyvista.PolyData` object
 # containing 500 points (and 500 corresponding vertex cells).  The cell and

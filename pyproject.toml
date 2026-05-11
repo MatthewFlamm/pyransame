@@ -28,12 +28,12 @@ authors = [
 "Bug Tracker" = "https://github.com/MatthewFlamm/pyransame/issues"
 "Documentation" = "https://matthewflamm.github.io/pyransame/"
 
-# Register the ``ransam`` dataset accessor with PyVista (>= 0.48). On
+# Register the ``ransame`` dataset accessor with PyVista (>= 0.48). On
 # newer PyVista releases the accessor is loaded lazily on first attribute
 # access, so users only need ``pip install pyransame`` to get
-# ``mesh.ransam.*``. Older PyVista releases ignore this entry point.
+# ``mesh.ransame.*``. Older PyVista releases ignore this entry point.
 [project.entry-points."pyvista.accessors"]
-ransam = "pyransame.accessor"
+ransame = "pyransame.accessor"
 
 [tool.setuptools_scm]
 write_to = "src/pyransame/_version.py"

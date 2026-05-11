@@ -38,13 +38,13 @@ def plot_points(points):
 ###############################################################################
 # Sampling twice in succession will lead to different results.
 
-points = antarctica.ransam.surface_dataset(500)
+points = antarctica.ransame.surface_dataset(500)
 plot_points(points)
 
 ###############################################################################
 # Second sampling with slightly different results
 
-points = antarctica.ransam.surface_dataset(500)
+points = antarctica.ransame.surface_dataset(500)
 plot_points(points)
 
 ###############################################################################
@@ -52,12 +52,12 @@ plot_points(points)
 # ensure that the same result is obtained.
 
 pyransame.rng = np.random.default_rng(seed=42)
-points = antarctica.ransam.surface_dataset(500)
+points = antarctica.ransame.surface_dataset(500)
 plot_points(points)
 
 ###############################################################################
 # Second sampling with identical results.
 
 pyransame.rng = np.random.default_rng(seed=42)
-points = antarctica.ransam.surface_dataset(500)
+points = antarctica.ransame.surface_dataset(500)
 plot_points(points)

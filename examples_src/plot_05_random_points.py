@@ -25,7 +25,7 @@ antarctica.points /= 1000.0  # convert to kilometers
 ###############################################################################
 # sample 500 points uniformly randomly.
 
-points = antarctica.ransam.surface_points(500)
+points = antarctica.ransame.surface_points(500)
 points
 
 ###############################################################################
