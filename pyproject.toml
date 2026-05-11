@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 dynamic = ["version"]
 name = "pyransame"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "pyvista>=0.44",
     "numpy",
@@ -16,6 +16,11 @@ keywords = ["pyvista", "vtk", "numpy", "mesh", "sample"]
 license = {text = "MIT License"}
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
 ]
