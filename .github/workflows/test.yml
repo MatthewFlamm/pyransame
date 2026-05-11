@@ -33,7 +33,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements-test.txt
-    - name: Install pyvista version
+    - name: Install pyvista (latest)
+      if: ${{ matrix.pyvista-version == 'latest' }}
+      run: python -m pip install --upgrade pyvista
+    - name: Install pyvista (pinned)
       if: ${{ matrix.pyvista-version != 'latest' }}
       run: python -m pip install pyvista==${{ matrix.pyvista-version }}
     - name: Install vtk version

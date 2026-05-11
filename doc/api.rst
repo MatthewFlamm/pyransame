@@ -14,3 +14,12 @@ API Documentation
    random_line_dataset
    random_vertex_points
    random_vertex_dataset
+
+PyVista dataset accessor
+------------------------
+
+Registered automatically on PyVista >= 0.48 via the
+``pyvista.accessors`` entry point.
+
+.. autoclass:: pyransame.accessor.RansameAccessor
+   :members:
