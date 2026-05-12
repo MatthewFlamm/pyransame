@@ -6,12 +6,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  id-token: write
 
 jobs:
   deploy:
 
     runs-on: ubuntu-latest
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pyransame
 
     steps:
     - uses: actions/checkout@v6
@@ -27,6 +31,3 @@ jobs:
       run: python -m build
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
