@@ -1,7 +1,7 @@
 jupyter_sphinx==0.5.3
 jupyterlab==4.5.7
 numpydoc==1.10.0
-pydata-sphinx-theme==0.18.0
+pydata-sphinx-theme==0.19.0
 pyvista==0.48.4
 sphinx==8.2.1
 sphinx-design==0.6.1
