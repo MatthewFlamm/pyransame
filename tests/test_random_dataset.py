@@ -44,7 +44,7 @@ def test_random_line_dataset():
 
 
 @pytest.mark.skipif(
-    pv.vtk_version_info[:2] < (9, 3), reason="requires vtk ve4sion 9.3 or higher"
+    pv.vtk_version_info[:2] < (9, 3), reason="requires vtk version 9.3 or higher"
 )
 def test_random_vertex_dataset():
     mesh = pv.ImageData(dimensions=(10, 10, 10))
