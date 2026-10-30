@@ -65,7 +65,7 @@ def test_line_points_and_dataset():
 
 
 @pytest.mark.skipif(
-    pv.vtk_version_info < (9, 3), reason="requires vtk version 9.3 or higher"
+    pv.vtk_version_info[:2] < (9, 3), reason="requires vtk version 9.3 or higher"
 )
 def test_vertex_points_and_dataset():
     mesh = pv.PolyData(pv.ImageData(dimensions=(5, 5, 5)).points)
