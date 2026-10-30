@@ -4,7 +4,6 @@ from typing import Tuple
 
 import numpy as np
 import pyvista as pv
-from vtk import mutable  # type: ignore
 
 import pyransame
 
@@ -354,15 +353,7 @@ def _generate_points_in_hexagonal_prism(points: np.ndarray, n: int = 1) -> np.nd
 def _generate_points_in_polyhedron(cell: pv.Cell, n: int = 1) -> np.ndarray:
     faces = cell.faces
 
-    # version >0.39 pyvista could be used in the future
-    para_center = [0.0, 0.0, 0.0]
-    sub_id = cell.GetParametricCenter(para_center)
-    # EvaluateLocation requires mutable sub_id
-    sub_id = mutable(sub_id)
-    # center and weights are returned from EvaluateLocation
-    cell_center = [0.0, 0.0, 0.0]
-    weights = [0.0] * cell.n_points
-    cell.EvaluateLocation(sub_id, para_center, cell_center, weights)
+    cell_center = cell.center
 
     tetras = []
 
