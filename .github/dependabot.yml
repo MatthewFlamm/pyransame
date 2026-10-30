@@ -8,31 +8,35 @@ updates:
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/" # Location of package manifests
     groups:
-      test:
+      minor-and-patch:
         patterns:
-          - "pytest*"
-          - "hypothesis"
-      static:
-        patterns:
-          - "mypy"
-      docs:
-        patterns:
-          - "numpydoc"
-          - "pydata-sphinx-theme"
-          - "sphinx*"
-
-      docs-dynamic:
-        patterns:
-          - "trame*"
-          - "jupyter*"
-
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     schedule:
       interval: "monthly"
+
   - package-ecosystem: "github-actions"
     directory: "/"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     schedule:
       interval: "monthly"
+
   - package-ecosystem: "devcontainers" # See documentation for possible values
     directory: "/"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     schedule:
       interval: "monthly"
